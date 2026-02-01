@@ -180,28 +180,103 @@ export default function Home() {
             </div>
           </div>
         </section>
+        <section className="w-full py-20 md:py-32 bg-black/40 border-y border-white/5 relative overflow-hidden">
+          <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[600px] bg-primary/5 rounded-full blur-3xl pointer-events-none -z-10" />
+
+          <div className="container px-4 md:px-6">
+            <div className="flex flex-col items-center text-center space-y-4 mb-16">
+              <h2 className="text-3xl font-bold tracking-tighter sm:text-5xl text-white">
+                How It Works
+              </h2>
+              <p className="max-w-[700px] text-muted-foreground md:text-xl">
+                Simple, transparent, and secure. Start trading in minutes.
+              </p>
+            </div>
+
+            <div className="grid gap-12 md:grid-cols-3 relative">
+              {/* Connecting Line (Desktop) */}
+              <div className="hidden md:block absolute top-12 left-[16%] right-[16%] h-0.5 bg-gradient-to-r from-primary/0 via-primary/50 to-primary/0 z-0" />
+
+              <div className="relative z-10 flex flex-col items-center text-center space-y-4">
+                <div className="size-24 rounded-full bg-background border-2 border-primary/50 flex items-center justify-center shadow-[0_0_30px_-5px_var(--color-primary)]">
+                  <span className="text-3xl font-black text-white">1</span>
+                </div>
+                <h3 className="text-xl font-bold text-white">Create Account</h3>
+                <p className="text-muted-foreground">Sign up as a buyer or seller. Connect your wallet and set up your profile.</p>
+              </div>
+              <div className="relative z-10 flex flex-col items-center text-center space-y-4">
+                <div className="size-24 rounded-full bg-background border-2 border-secondary/50 flex items-center justify-center shadow-[0_0_30px_-5px_var(--color-secondary)]">
+                  <span className="text-3xl font-black text-white">2</span>
+                </div>
+                <h3 className="text-xl font-bold text-white">List or Buy</h3>
+                <p className="text-muted-foreground">Upload your digital assets or browse the marketplace for products.</p>
+              </div>
+              <div className="relative z-10 flex flex-col items-center text-center space-y-4">
+                <div className="size-24 rounded-full bg-background border-2 border-cyan-500/50 flex items-center justify-center shadow-[0_0_30px_-5px_#06b6d4]">
+                  <span className="text-3xl font-black text-white">3</span>
+                </div>
+                <h3 className="text-xl font-bold text-white">Instant Settlememt</h3>
+                <p className="text-muted-foreground">Payments are verified and funds/products are transferred instantly.</p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* Tech Stack Section */}
+        <section className="w-full py-20 px-4 md:px-6 border-b border-white/5">
+          <div className="container flex flex-col items-center text-center space-y-8">
+            <h2 className="text-2xl font-bold tracking-tight text-muted-foreground uppercase opacity-50">
+              Built with modern stack
+            </h2>
+            <div className="flex flex-wrap justify-center gap-8 md:gap-16 grayscale hover:grayscale-0 transition-all duration-500 opacity-70 hover:opacity-100">
+              <div className="flex items-center gap-2">
+                <span className="text-xl font-bold text-white">Next.js 15</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <span className="text-xl font-bold text-sky-400">Tailwind CSS</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <span className="text-xl font-bold text-white">Prisma</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <span className="text-xl font-bold text-yellow-500">Bitcoin</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <span className="text-xl font-bold text-green-500">USDT</span>
+              </div>
+            </div>
+          </div>
+        </section>
       </main>
 
-      <footer className="w-full py-10 px-4 md:px-6 border-t border-white/5 bg-black/20 backdrop-blur-lg">
-        <div className="container flex flex-col md:flex-row items-center justify-between gap-6">
-          <div className="text-center md:text-left">
-            <Link className="flex items-center gap-2 font-bold text-lg tracking-tighter justify-center md:justify-start" href="#">
-              <span className="text-gradient">CryptoCommerce</span>
-            </Link>
-            <p className="text-sm text-muted-foreground mt-2">© 2026 CryptoMarket Inc.</p>
+      <footer className="w-full py-10 px-4 md:px-6 border-t border-white/5 bg-black/40 backdrop-blur-lg">
+        <div className="container flex flex-col items-center gap-6">
+          <div className="flex flex-col md:flex-row items-center justify-between w-full gap-6">
+            <div className="text-center md:text-left">
+              <Link className="flex items-center gap-2 font-bold text-lg tracking-tighter justify-center md:justify-start" href="#">
+                <span className="text-gradient">CryptoCommerce</span>
+              </Link>
+              <p className="text-sm text-muted-foreground mt-2">The authorized marketplace for digital goods.</p>
+            </div>
+
+            <nav className="flex gap-6 sm:gap-10">
+              <Link className="text-sm text-muted-foreground hover:text-white transition-colors" href="#">
+                Terms
+              </Link>
+              <Link className="text-sm text-muted-foreground hover:text-white transition-colors" href="#">
+                Privacy
+              </Link>
+              <Link className="text-sm text-muted-foreground hover:text-white transition-colors" href="#">
+                Contact
+              </Link>
+            </nav>
           </div>
 
-          <nav className="flex gap-6 sm:gap-10">
-            <Link className="text-sm text-muted-foreground hover:text-white transition-colors" href="#">
-              Terms
-            </Link>
-            <Link className="text-sm text-muted-foreground hover:text-white transition-colors" href="#">
-              Privacy
-            </Link>
-            <Link className="text-sm text-muted-foreground hover:text-white transition-colors" href="#">
-              Contact
-            </Link>
-          </nav>
+          <div className="w-full h-px bg-white/5 my-4" />
+
+          <p className="text-sm text-muted-foreground font-medium animate-pulse">
+            Built with <span className="text-red-500">❤</span> and a lot of coffee by <span className="text-white">Robson Muniz, Portugal</span>
+          </p>
         </div>
       </footer>
     </div>
