@@ -63,7 +63,7 @@ export default function Home() {
             </h1>
 
             <p className="mx-auto max-w-[700px] text-lg text-muted-foreground md:text-xl mb-10 leading-relaxed">
-              Experience the next evolution of e-commerce. Instant global payments, secure delivery, and zero chargebacks. Welcome to the future.
+              Sell digital files with crypto: pay → confirm → download unlocks. Vendors withdraw anytime.
             </p>
 
             <div className="flex flex-col sm:flex-row gap-4 items-center w-full justify-center">

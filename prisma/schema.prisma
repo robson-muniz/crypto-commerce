@@ -12,6 +12,7 @@ model User {
   email     String   @unique
   password  String?  // Hashed password for email/password auth
   role      String   @default("USER") // USER, VENDOR, ADMIN
+  payoutAddress String? // Seller's BTC address for receiving payments
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   
@@ -48,6 +49,8 @@ model Order {
   status        String   @default("PENDING") // PENDING, CONFIRMED, COMPLETED, CANCELLED
   downloadUrl   String?  // Generated after purchase
   paymentAddress String? // Address to send funds to
+  addressIndex  Int?     // HD Wallet derivation index
+  payoutTxHash  String?  // Transaction hash of payout to seller
   transactions  Transaction[]
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt

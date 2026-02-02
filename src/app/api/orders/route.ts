@@ -2,6 +2,7 @@ import { NextResponse } from "next/server"
 import prisma from "@/lib/db"
 import { getServerSession } from "next-auth"
 import { authOptions } from "@/lib/auth"
+import { deriveAddress } from "@/lib/bitcoin-core"
 
 export async function POST(req: Request) {
   try {
@@ -18,9 +19,15 @@ export async function POST(req: Request) {
       return NextResponse.json({ message: "Product not found" }, { status: 404 })
     }
 
-    // Generate mock deposit address
-    // In real app, call crypto node or API (e.g. Tatum, Coinbase) to get new address
-    const paymentAddress = `bc1q-${Math.random().toString(36).substring(7)}-matches-product-${product.id}`
+    // Get next address index
+    const lastOrder = await prisma.order.findFirst({
+      orderBy: { addressIndex: 'desc' },
+      select: { addressIndex: true }
+    })
+    const nextIndex = (lastOrder?.addressIndex ?? 0) + 1
+
+    // Generate deposit address from HD Wallet
+    const paymentAddress = deriveAddress(nextIndex)
 
     const order = await prisma.order.create({
       data: {
@@ -30,13 +37,17 @@ export async function POST(req: Request) {
         currency: product.currency,
         status: "PENDING",
         paymentAddress,
+        addressIndex: nextIndex,
         downloadUrl: null // Will be set upon completion
       }
     })
 
     return NextResponse.json(order, { status: 201 })
-  } catch (error) {
-    console.error(error)
-    return NextResponse.json({ message: "Internal Error" }, { status: 500 })
+  } catch (error: any) {
+    console.error("Order creation error:", error)
+    return NextResponse.json({
+      message: "Internal Error",
+      error: error.message || String(error)
+    }, { status: 500 })
   }
 }

@@ -9,6 +9,7 @@ export default function RegisterPage() {
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
   const [role, setRole] = useState("USER") // Default to Buyer (USER)
+  const [payoutAddress, setPayoutAddress] = useState("")
   const [error, setError] = useState("")
   const [loading, setLoading] = useState(false)
 
@@ -23,7 +24,7 @@ export default function RegisterPage() {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ email, password, role }),
+        body: JSON.stringify({ email, password, role, payoutAddress: role === "VENDOR" ? payoutAddress : undefined }),
       })
 
       const data = await res.json()
@@ -121,6 +122,32 @@ export default function RegisterPage() {
             </select>
           </div>
         </div>
+
+        {role === "VENDOR" && (
+          <div>
+            <label
+              htmlFor="payoutAddress"
+              className="block text-sm font-medium text-gray-700"
+            >
+              Bitcoin Payout Address
+            </label>
+            <div className="mt-1">
+              <input
+                id="payoutAddress"
+                name="payoutAddress"
+                type="text"
+                placeholder="tb1q... (Testnet address)"
+                required={role === "VENDOR"}
+                value={payoutAddress}
+                onChange={(e) => setPayoutAddress(e.target.value)}
+                className="block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm font-mono text-xs"
+              />
+              <p className="mt-1 text-xs text-gray-500">
+                Your BTC address where you'll receive payments from sales
+              </p>
+            </div>
+          </div>
+        )}
 
         <div>
           <button

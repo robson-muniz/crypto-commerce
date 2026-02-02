@@ -6,13 +6,14 @@ import { z } from "zod"
 const userSchema = z.object({
   email: z.string().email(),
   password: z.string().min(6),
-  role: z.enum(["USER", "VENDOR"]).default("USER")
+  role: z.enum(["USER", "VENDOR"]).default("USER"),
+  payoutAddress: z.string().optional()
 })
 
 export async function POST(req: Request) {
   try {
     const body = await req.json()
-    const { email, password, role } = userSchema.parse(body)
+    const { email, password, role, payoutAddress } = userSchema.parse(body)
 
     // Check if email already exists
     const existingUser = await prisma.user.findUnique({
@@ -32,7 +33,8 @@ export async function POST(req: Request) {
       data: {
         email,
         password: hashedPassword,
-        role
+        role,
+        payoutAddress: role === "VENDOR" ? payoutAddress : undefined
       }
     })
 
