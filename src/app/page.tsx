@@ -75,7 +75,7 @@ export default function Home() {
               </Link>
               <Link
                 className="inline-flex h-12 w-full sm:w-auto items-center justify-center rounded-full border border-white/10 bg-white/5 backdrop-blur-sm px-8 text-base font-semibold transition-colors hover:bg-white/10 hover:text-white"
-                href="/login"
+                href="/marketplace"
               >
                 Explore Marketplace
               </Link>
@@ -201,8 +201,8 @@ export default function Home() {
                 <div className="size-24 rounded-full bg-background border-2 border-primary/50 flex items-center justify-center shadow-[0_0_30px_-5px_var(--color-primary)]">
                   <span className="text-3xl font-black text-white">1</span>
                 </div>
-                <h3 className="text-xl font-bold text-white">Create Account</h3>
-                <p className="text-muted-foreground">Sign up as a buyer or seller. Connect your wallet and set up your profile.</p>
+                <h3 className="text-xl font-bold text-white">Start Instantly</h3>
+                <p className="text-muted-foreground">Buyers checkout as guests—no email required. Sellers register to list products.</p>
               </div>
               <div className="relative z-10 flex flex-col items-center text-center space-y-4">
                 <div className="size-24 rounded-full bg-background border-2 border-secondary/50 flex items-center justify-center shadow-[0_0_30px_-5px_var(--color-secondary)]">
@@ -275,7 +275,7 @@ export default function Home() {
           <div className="w-full h-px bg-white/5 my-4" />
 
           <p className="text-sm text-muted-foreground font-medium animate-pulse">
-            Built with <span className="text-red-500">❤</span> and a lot of coffee by <span className="text-white">Robson Muniz, Portugal</span>
+            Built with <span className="text-red-500">❤</span> and a lot of coffee by <span className="text-white">RM, Portugal 🇵🇹</span>
           </p>
         </div>
       </footer>
