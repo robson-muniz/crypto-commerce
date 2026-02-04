@@ -21,7 +21,7 @@ export default async function MarketplacePage() {
           </Link>
           <div className="flex items-center gap-4">
             <Link href="/login" className="text-sm font-medium hover:text-primary transition-colors">
-              Sign In
+              Seller Login
             </Link>
             <Link href="/register" className="text-sm font-medium bg-white text-black px-4 py-2 rounded-full hover:bg-gray-200 transition-colors">
               Start Selling
