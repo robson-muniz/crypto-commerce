@@ -1,8 +1,7 @@
 import Link from "next/link";
 import prisma from "@/lib/db";
-import { ArrowRight } from "lucide-react";
+import MarketplaceProduct from "@/components/MarketplaceProduct";
 
-// Server Component
 export default async function MarketplacePage() {
   const products = await prisma.product.findMany({
     orderBy: { createdAt: "desc" },
@@ -50,43 +49,7 @@ export default async function MarketplacePage() {
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
             {products.map((product) => (
-              <Link
-                key={product.id}
-                href={`/product/${product.id}`}
-                className="group relative flex flex-col overflow-hidden rounded-3xl border border-white/10 bg-white/5 transition-all hover:-translate-y-1 hover:border-primary/50 hover:shadow-2xl hover:shadow-primary/10"
-              >
-                {/* Image Placeholder */}
-                <div className="aspect-[4/3] bg-gradient-to-br from-gray-800 to-black flex items-center justify-center group-hover:from-gray-800 group-hover:to-gray-900 transition-colors">
-                  <div className="text-6xl group-hover:scale-110 transition-transform duration-500">
-                    📦
-                  </div>
-                </div>
-
-                <div className="flex flex-1 flex-col p-6">
-                  <div className="flex items-start justify-between gap-4 mb-2">
-                    <h3 className="font-bold text-xl line-clamp-1 group-hover:text-primary transition-colors">
-                      {product.title}
-                    </h3>
-                  </div>
-
-                  <p className="text-muted-foreground text-sm line-clamp-2 mb-4 flex-1">
-                    {product.description || "No description provided."}
-                  </p>
-
-                  <div className="flex items-center justify-between border-t border-white/10 pt-4 mt-auto">
-                    <div className="flex flex-col">
-                      <span className="text-xs text-muted-foreground uppercase tracking-wider">Price</span>
-                      <span className="font-mono font-bold text-lg text-white">
-                        ${product.price} <span className="text-sm text-gray-500">USD</span>
-                      </span>
-                    </div>
-
-                    <div className="size-10 rounded-full bg-white text-black flex items-center justify-center opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300">
-                      <ArrowRight className="size-5" />
-                    </div>
-                  </div>
-                </div>
-              </Link>
+              <MarketplaceProduct key={product.id} product={product} />
             ))}
           </div>
         )}

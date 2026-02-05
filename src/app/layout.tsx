@@ -9,6 +9,8 @@ export const metadata: Metadata = {
   description: "Secure, instant, and premium digital asset trading.",
 };
 
+import NextTopLoader from "nextjs-toploader";
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -16,7 +18,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className="dark">
-      <body className={outfit.className}>{children}</body>
+      <body className={outfit.className}>
+        <NextTopLoader color="#7c3aed" showSpinner={false} />
+        {children}
+      </body>
     </html>
   );
 }

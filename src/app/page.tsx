@@ -436,7 +436,7 @@ export default function Home() {
               Built with <span className="text-red-500">❤</span> for creators worldwide
             </p>
             <p className="text-xs text-muted-foreground">
-              © {new Date().getFullYear()} CryptoCommerce. All rights reserved. Portugal 🇵🇹
+              © <span suppressHydrationWarning>{new Date().getFullYear()}</span> CryptoCommerce. All rights reserved. Portugal 🇵🇹
             </p>
           </div>
         </div>
