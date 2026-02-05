@@ -1,30 +1,62 @@
-export default function DashboardPage() {
-  return (
-    <div className="space-y-4">
-      <h2 className="text-2xl font-bold tracking-tight">Overview</h2>
-      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-        <div className="rounded-xl border bg-card text-card-foreground shadow p-6">
-          <div className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <h3 className="tracking-tight text-sm font-medium">Total Revenue</h3>
-          </div>
-          <div className="text-2xl font-bold">$0.00</div>
-          <p className="text-xs text-muted-foreground">+0% from last month</p>
-        </div>
+import { getServerSession } from "next-auth"
+import { authOptions } from "@/lib/auth"
+import { redirect } from "next/navigation"
+import db from "@/lib/db"
+import DashboardClient from "@/components/dashboard-client"
 
-        <div className="rounded-xl border bg-card text-card-foreground shadow p-6">
-          <div className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <h3 className="tracking-tight text-sm font-medium">Active Products</h3>
-          </div>
-          <div className="text-2xl font-bold">0</div>
-        </div>
+async function getDashboardData(userId: string) {
+  const [productsCount, orders, products] = await Promise.all([
+    db.product.count({
+      where: {
+        vendorId: userId,
+      },
+    }),
+    db.order.findMany({
+      where: {
+        product: {
+          vendorId: userId,
+        },
+        status: "COMPLETED",
+      },
+      orderBy: {
+        createdAt: "desc",
+      },
+      include: {
+        product: true,
+      },
+    }),
+    db.product.findMany({
+      where: {
+        vendorId: userId,
+      },
+      take: 5,
+      orderBy: {
+        createdAt: "desc",
+      },
+    }),
+  ])
 
-        <div className="rounded-xl border bg-card text-card-foreground shadow p-6">
-          <div className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <h3 className="tracking-tight text-sm font-medium">Orders</h3>
-          </div>
-          <div className="text-2xl font-bold">0</div>
-        </div>
-      </div>
-    </div>
-  )
+  const totalRevenue = orders.reduce((acc, order) => {
+    return acc + (order.amount || 0)
+  }, 0)
+
+  return {
+    productsCount,
+    ordersCount: orders.length,
+    totalRevenue,
+    recentOrders: orders.slice(0, 5),
+    recentProducts: products,
+  }
+}
+
+export default async function DashboardPage() {
+  const session = await getServerSession(authOptions)
+
+  if (!session) {
+    redirect("/login")
+  }
+
+  const data = await getDashboardData(session.user.id)
+
+  return <DashboardClient data={data} />
 }

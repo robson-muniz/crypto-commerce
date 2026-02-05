@@ -3,7 +3,7 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
+  provider = "sqlite"
   url      = env("DATABASE_URL")
 }
 
@@ -45,6 +45,7 @@ model Order {
   productId     String
   product       Product  @relation(fields: [productId], references: [id])
   amount        Float
+  amountBtc     Float?   // Exact amount in BTC expected at time of order
   currency      String
   status        String   @default("PENDING") // PENDING, CONFIRMED, COMPLETED, CANCELLED
   downloadUrl   String?  // Generated after purchase

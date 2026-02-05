@@ -1,71 +1,58 @@
-"use client"
+"use client";
 
-import Link from "next/link"
-import { usePathname } from "next/navigation"
-import { LayoutDashboard, ShoppingBag, CreditCard, Wallet, Settings, LogOut } from "lucide-react"
-import { cn } from "@/lib/utils"
-import { signOut } from "next-auth/react"
-
-const items = [
-  {
-    title: "Overview",
-    href: "/dashboard",
-    icon: LayoutDashboard,
-  },
-  {
-    title: "Products",
-    href: "/dashboard/products",
-    icon: ShoppingBag,
-  },
-  {
-    title: "Orders",
-    href: "/dashboard/orders",
-    icon: CreditCard,
-  },
-  {
-    title: "Wallet",
-    href: "/dashboard/wallet",
-    icon: Wallet,
-  },
-  {
-    title: "Settings",
-    href: "/dashboard/settings",
-    icon: Settings,
-  },
-]
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import { Package, DollarSign, ShoppingCart, Settings, LayoutDashboard } from "lucide-react";
+import { cn } from "@/lib/utils";
 
 export function DashboardNav() {
-  const pathname = usePathname()
+  const pathname = usePathname();
+
+  const links = [
+    {
+      title: "Overview",
+      href: "/dashboard",
+      icon: LayoutDashboard,
+    },
+    {
+      title: "Products",
+      href: "/dashboard/products",
+      icon: Package,
+    },
+    {
+      title: "Orders",
+      href: "/dashboard/orders",
+      icon: ShoppingCart,
+    },
+    {
+      title: "Settings",
+      href: "/dashboard/settings",
+      icon: Settings,
+    },
+  ];
 
   return (
-    <nav className="grid items-start gap-2">
-      {items.map((item, index) => {
-        const Icon = item.icon
+    <nav className="flex flex-col space-y-2 p-4">
+      {links.map((link) => {
+        const Icon = link.icon;
+        const isActive = pathname === link.href;
+
         return (
           <Link
-            key={index}
-            href={item.href}
+            key={link.href}
+            href={link.href}
+            className={cn(
+              "flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-all hover:text-white",
+              isActive
+                ? "bg-white/10 text-white shadow-sm"
+                : "text-gray-400 hover:bg-white/5"
+            )}
           >
-            <span
-              className={cn(
-                "group flex items-center rounded-md px-3 py-2 text-sm font-medium hover:bg-accent hover:text-accent-foreground",
-                pathname === item.href ? "bg-indigo-50 text-indigo-600" : "transparent text-slate-700 hover:bg-slate-100"
-              )}
-            >
-              <Icon className="mr-2 h-4 w-4" />
-              <span>{item.title}</span>
-            </span>
+            <Icon className="h-4 w-4" />
+            {link.title}
           </Link>
-        )
+        );
       })}
-
-      <button
-        onClick={() => signOut({ callbackUrl: "/login" })}
-        className="group flex w-full items-center rounded-md px-3 py-2 text-sm font-medium text-red-600 hover:bg-red-50"
-      >
-        <LogOut className="mr-2 h-4 w-4" />
-        <span>Sign Out</span>
-      </button>
     </nav>
-  )
+  );
 }

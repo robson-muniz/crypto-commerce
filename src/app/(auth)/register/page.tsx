@@ -3,6 +3,7 @@
 import { useState } from "react"
 import { useRouter } from "next/navigation"
 import Link from "next/link"
+import { Lock, Mail, User, Wallet, Sparkles } from "lucide-react"
 
 export default function RegisterPage() {
   const router = useRouter()
@@ -43,19 +44,24 @@ export default function RegisterPage() {
   }
 
   return (
-    <div className="bg-white p-8 shadow-lg rounded-lg border border-gray-200">
-      <div className="mb-6 text-center">
-        <h2 className="text-3xl font-bold tracking-tight text-gray-900">
-          Create an account
+    <div className="bg-white/5 backdrop-blur-sm p-8 shadow-2xl rounded-2xl border border-white/10 max-w-md w-full">
+      <div className="mb-8 text-center">
+        <div className="flex justify-center mb-4">
+          <div className="p-3 rounded-2xl bg-gradient-to-br from-blue-600/20 to-purple-600/20 border border-white/10">
+            <Sparkles className="w-8 h-8 text-purple-400" />
+          </div>
+        </div>
+        <h2 className="text-3xl font-bold tracking-tight text-white">
+          Create Account
         </h2>
-        <p className="mt-2 text-sm text-gray-600">
+        <p className="mt-2 text-sm text-gray-400">
           Start buying or selling with crypto
         </p>
       </div>
 
-      <form onSubmit={handleSubmit} className="space-y-6">
+      <form onSubmit={handleSubmit} className="space-y-5">
         {error && (
-          <div className="bg-red-50 text-red-500 p-3 rounded text-sm">
+          <div className="bg-red-500/10 border border-red-500/20 text-red-400 p-3 rounded-lg text-sm">
             {error}
           </div>
         )}
@@ -63,11 +69,14 @@ export default function RegisterPage() {
         <div>
           <label
             htmlFor="email"
-            className="block text-sm font-medium text-gray-700"
+            className="block text-sm font-medium text-gray-300 mb-2"
           >
             Email address
           </label>
-          <div className="mt-1">
+          <div className="relative">
+            <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+              <Mail className="h-5 w-5 text-gray-500" />
+            </div>
             <input
               id="email"
               name="email"
@@ -76,7 +85,8 @@ export default function RegisterPage() {
               required
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
+              placeholder="Enter your email"
+              className="block w-full rounded-lg border border-white/10 bg-white/5 pl-10 pr-4 py-3 text-white placeholder:text-gray-500 shadow-sm focus:border-purple-500/50 focus:outline-none focus:ring-2 focus:ring-purple-500/20 transition-all"
             />
           </div>
         </div>
@@ -84,11 +94,14 @@ export default function RegisterPage() {
         <div>
           <label
             htmlFor="password"
-            className="block text-sm font-medium text-gray-700"
+            className="block text-sm font-medium text-gray-300 mb-2"
           >
             Password
           </label>
-          <div className="mt-1">
+          <div className="relative">
+            <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+              <Lock className="h-5 w-5 text-gray-500" />
+            </div>
             <input
               id="password"
               name="password"
@@ -97,7 +110,8 @@ export default function RegisterPage() {
               required
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className="block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
+              placeholder="Create a password"
+              className="block w-full rounded-lg border border-white/10 bg-white/5 pl-10 pr-4 py-3 text-white placeholder:text-gray-500 shadow-sm focus:border-purple-500/50 focus:outline-none focus:ring-2 focus:ring-purple-500/20 transition-all"
             />
           </div>
         </div>
@@ -105,67 +119,73 @@ export default function RegisterPage() {
         <div>
           <label
             htmlFor="role"
-            className="block text-sm font-medium text-gray-700"
+            className="block text-sm font-medium text-gray-300 mb-2"
           >
             I want to
           </label>
-          <div className="mt-1">
+          <div className="relative">
+            <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+              <User className="h-5 w-5 text-gray-500" />
+            </div>
             <select
               id="role"
               name="role"
               value={role}
               onChange={(e) => setRole(e.target.value)}
-              className="block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
+              className="block w-full rounded-lg border border-white/10 bg-white/5 pl-10 pr-4 py-3 text-white shadow-sm focus:border-purple-500/50 focus:outline-none focus:ring-2 focus:ring-purple-500/20 transition-all appearance-none cursor-pointer"
             >
-              <option value="USER">Buy Products</option>
-              <option value="VENDOR">Sell Products</option>
+              <option value="USER" className="bg-gray-900">Buy Products</option>
+              <option value="VENDOR" className="bg-gray-900">Sell Products</option>
             </select>
           </div>
         </div>
 
         {role === "VENDOR" && (
-          <div>
+          <div className="animate-in fade-in slide-in-from-top-2 duration-200">
             <label
               htmlFor="payoutAddress"
-              className="block text-sm font-medium text-gray-700"
+              className="block text-sm font-medium text-gray-300 mb-2"
             >
               Bitcoin Payout Address
             </label>
-            <div className="mt-1">
+            <div className="relative">
+              <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                <Wallet className="h-5 w-5 text-gray-500" />
+              </div>
               <input
                 id="payoutAddress"
                 name="payoutAddress"
                 type="text"
-                placeholder="tb1q... (Testnet address)"
+                placeholder="bc1q... or tb1q... (Testnet)"
                 required={role === "VENDOR"}
                 value={payoutAddress}
                 onChange={(e) => setPayoutAddress(e.target.value)}
-                className="block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm font-mono text-xs"
+                className="block w-full rounded-lg border border-white/10 bg-white/5 pl-10 pr-4 py-3 text-white placeholder:text-gray-500 shadow-sm focus:border-purple-500/50 focus:outline-none focus:ring-2 focus:ring-purple-500/20 transition-all font-mono text-sm"
               />
-              <p className="mt-1 text-xs text-gray-500">
-                Your BTC address where you'll receive payments from sales
-              </p>
             </div>
+            <p className="mt-2 text-xs text-gray-500">
+              Your BTC address where you'll receive payments from sales
+            </p>
           </div>
         )}
 
-        <div>
+        <div className="pt-2">
           <button
             type="submit"
             disabled={loading}
-            className="flex w-full justify-center rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 disabled:opacity-50"
+            className="flex w-full justify-center rounded-lg bg-gradient-to-r from-blue-600 to-purple-600 px-4 py-3 text-sm font-medium text-white shadow-lg hover:shadow-purple-900/20 transition-all hover:scale-[1.02] active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"
           >
-            {loading ? "Creating account..." : "Sign up"}
+            {loading ? "Creating account..." : "Create Account"}
           </button>
         </div>
       </form>
 
       <div className="mt-6 text-center text-sm">
-        <p className="text-gray-600">
+        <p className="text-gray-400">
           Already have an account?{" "}
           <Link
             href="/login"
-            className="font-medium text-indigo-600 hover:text-indigo-500"
+            className="font-medium text-purple-400 hover:text-purple-300 transition-colors"
           >
             Sign in
           </Link>

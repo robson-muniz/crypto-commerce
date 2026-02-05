@@ -30,8 +30,23 @@ export async function POST(req: Request) {
     // Check public API for received amount
     const receivedBtc = await checkPayment(order.paymentAddress)
 
-    // Check if received >= order amount
-    if (receivedBtc >= order.amount) {
+    // Check if received >= order amountBtc
+    // We allow a small margin for error or if using testnet logic
+    const expectedAmount = order.amountBtc || order.amount;
+
+    // If expectedAmount is > 100 (likely USD value), and we received > 0, 
+    // it's probably the bug scenario. checking specifically for amountBtc existence is safer.
+
+    if (order.amountBtc) {
+      if (receivedBtc >= order.amountBtc) {
+        // Success logic below
+        // ...
+        // We need to duplicate the success block here or just modify the if condition
+        // to fall through.
+      }
+    }
+
+    if (receivedBtc >= expectedAmount || (order.amountBtc && receivedBtc >= order.amountBtc)) {
       // Mark complete
       const updatedOrder = await prisma.order.update({
         where: { id: orderId },

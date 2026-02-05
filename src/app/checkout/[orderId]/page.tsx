@@ -23,13 +23,18 @@ export default async function CheckoutPage({ params }: { params: Promise<{ order
         <div className="mb-6">
           <div className="text-sm text-gray-500 mb-1">Send exact amount</div>
           <div className="text-4xl font-mono font-bold text-indigo-600 tracking-tight">
-            {order.amount} {order.currency}
+            {order.amountBtc || order.amount} {order.amountBtc ? 'BTC' : order.currency}
           </div>
+          {order.amountBtc && (
+            <div className="text-sm text-gray-400 mt-1">
+              (Approx. ${order.amount} {order.currency})
+            </div>
+          )}
         </div>
 
         {order.paymentAddress && (
           <div className="mb-8 flex flex-col items-center">
-            <QRCode value={`bitcoin:${order.paymentAddress}?amount=${order.amount}`} />
+            <QRCode value={`bitcoin:${order.paymentAddress}?amount=${order.amountBtc || order.amount}`} />
             <div className="mt-4 bg-gray-100 p-3 rounded-lg w-full break-all border border-gray-200">
               <div className="text-xs text-gray-500 uppercase tracking-wide mb-1">Deposit Address (BTC Testnet)</div>
               <button className="font-mono text-xs sm:text-sm text-gray-800 hover:text-indigo-600 transition select-all">
