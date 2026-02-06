@@ -132,3 +132,4 @@ This project is open source and available under the [MIT License](LICENSE).
 <div align="center">
   <p>Build with love a lost of coffe by <strong>Robson Muniz, Portugal</strong></p>
 </div>
+# Force fresh rebuild
