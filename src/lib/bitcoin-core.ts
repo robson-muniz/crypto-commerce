@@ -1,8 +1,8 @@
 import * as bitcoin from 'bitcoinjs-lib';
 import * as bip32 from 'bip32';
-import * as ecc from 'tiny-secp256k1';
+import * as ecc from '@bitcoinerlab/secp256k1';
 
-// Initialize BIP32
+// Initialize BIP32 with Vercel-compatible secp256k1
 const bip32Factory = bip32.BIP32Factory(ecc);
 
 const NETWORK = process.env.BTC_NETWORK === 'mainnet'
