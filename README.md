@@ -15,7 +15,7 @@ CryptoCommerce is a premium, decentralized marketplace platform designed for the
 -   **🔐 Secure Authentication:** Robust user and vendor authentication system powered by NextAuth.js.
 -   **🛡️ Fraud Protection:** Smart contracts verify every transaction, eliminating chargebacks.
 -   **⚡ Instant Delivery:** Automated system delivers digital files immediately after payment confirmation.
--   **🌍 Global Payments:** Accept Bitcoin and USDT from anyone, anywhere.
+-   **🌍 Global Payments:** Accept Bitcoin from anyone, anywhere with real BTC mainnet support.
 -   **📱 Fully Responsive:** Optimized for mobile, tablet, and desktop devices.
 
 ---
@@ -29,6 +29,7 @@ This project is built with a modern, scalable technology stack:
 -   **Backend:** Next.js API Routes (Serverless)
 -   **Database:** [SQLite](https://www.sqlite.org/) (Dev) / Postgres (Prod) managed via [Prisma ORM](https://www.prisma.io/)
 -   **Authentication:** [NextAuth.js](https://next-auth.js.org/)
+-   **Payments:** Bitcoin mainnet/testnet with HD wallet derivation (BIP84)
 -   **Validation:** [Zod](https://zod.dev/)
 
 ---
@@ -61,7 +62,15 @@ Follow these steps to set up the project locally:
     DATABASE_URL="file:./dev.db" # Or your postgres URL
     NEXTAUTH_URL="http://localhost:3000"
     NEXTAUTH_SECRET="your-super-secret-key"
+    
+    # Bitcoin Configuration
+    # For development/testing, use TESTNET:
+    BTC_NETWORK="testnet"
+    # Generate a testnet wallet: node generate-wallet.js
+    BTC_XPUB="your-testnet-xpub-here"
     ```
+    
+    > **⚠️ For production deployment with real BTC, see [DEPLOYMENT_GUIDE.md](DEPLOYMENT_GUIDE.md)**
 
 4.  **Initialize the database:**
     ```bash
@@ -75,6 +84,21 @@ Follow these steps to set up the project locally:
     ```
 
     Open [http://localhost:3000](http://localhost:3000) to view the app.
+
+### Production Deployment
+
+To deploy with **real Bitcoin mainnet** payments on Vercel:
+
+📘 **See the comprehensive [DEPLOYMENT_GUIDE.md](DEPLOYMENT_GUIDE.md)** for step-by-step instructions including:
+- Mainnet wallet generation
+- Vercel environment configuration  
+- Database setup
+- Testing with real BTC
+- Security best practices
+- Troubleshooting
+
+> [!CAUTION]
+> Mainnet deployment involves real Bitcoin. Test thoroughly with small amounts first.
 
 ---
 
