@@ -1,0 +1,55 @@
+
+> crypto-commerce@0.1.0 build
+> prisma generate && next build
+
+Environment variables loaded from .env
+Prisma schema loaded from prisma/schema.prisma
+
+✔ Generated Prisma Client (v5.22.0) to ./node_modules/@prisma/client in 368ms
+
+Start by importing your Prisma Client (See: https://pris.ly/d/importing-client)
+
+Tip: Want to turn off tips and other hints? https://pris.ly/tip-4-nohints
+
+▲ Next.js 16.1.6 (Turbopack)
+- Environments: .env
+
+  Creating an optimized production build ...
+✓ Compiled successfully in 19.8s
+  Running TypeScript ...
+  Collecting page data using 7 workers ...
+  Generating static pages using 7 workers (0/19) ...
+  Generating static pages using 7 workers (4/19) 
+  Generating static pages using 7 workers (9/19) 
+  Generating static pages using 7 workers (14/19) 
+✓ Generating static pages using 7 workers (19/19) in 2.2s
+  Finalizing page optimization ...
+
+Route (app)
+┌ ○ /
+├ ○ /_not-found
+├ ƒ /api/auth/[...nextauth]
+├ ƒ /api/check-payment
+├ ƒ /api/orders
+├ ƒ /api/orders/[id]
+├ ƒ /api/products
+├ ƒ /api/register
+├ ƒ /api/simulate-payment
+├ ƒ /api/user/settings
+├ ƒ /api/user/withdraw
+├ ƒ /checkout/[orderId]
+├ ƒ /dashboard
+├ ƒ /dashboard/orders
+├ ƒ /dashboard/products
+├ ƒ /dashboard/products/new
+├ ƒ /dashboard/settings
+├ ƒ /dashboard/wallet
+├ ○ /login
+├ ○ /marketplace
+├ ƒ /product/[id]
+└ ○ /register
+
+
+○  (Static)   prerendered as static content
+ƒ  (Dynamic)  server-rendered on demand
+

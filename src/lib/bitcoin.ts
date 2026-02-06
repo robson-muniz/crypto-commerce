@@ -1,6 +1,6 @@
 import * as bitcoin from 'bitcoinjs-lib';
 import { BIP32Factory } from 'bip32';
-import * as ecc from 'tiny-secp256k1';
+import * as ecc from '@bitcoinerlab/secp256k1';
 
 const bip32 = BIP32Factory(ecc);
 const network = process.env.BITCOIN_NETWORK === 'mainnet' ? bitcoin.networks.bitcoin : bitcoin.networks.testnet;
