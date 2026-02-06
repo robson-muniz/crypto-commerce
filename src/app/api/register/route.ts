@@ -6,38 +6,21 @@ import { z } from "zod"
 // BTC address validation regex
 const btcRegex = /^(1|3|bc1|m|n|2|tb1)[a-zA-HJ-NP-Z0-9]{25,62}$/;
 
+// Registration is seller-only: email, password, BTC wallet
 const userSchema = z.object({
   email: z.string().email(),
   password: z.string().min(6),
-  role: z.enum(["USER", "VENDOR"]).default("USER"),
-  payoutAddress: z.string().optional()
-}).superRefine((data, ctx) => {
-  // For VENDOR role, payoutAddress is required
-  if (data.role === "VENDOR") {
-    if (!data.payoutAddress || data.payoutAddress.trim() === "") {
-      ctx.addIssue({
-        code: z.ZodIssueCode.custom,
-        message: "BTC Wallet is required for sellers",
-        path: ["payoutAddress"]
-      });
-      return;
-    }
-    
-    // Validate BTC address format
-    if (!btcRegex.test(data.payoutAddress)) {
-      ctx.addIssue({
-        code: z.ZodIssueCode.custom,
-        message: "Invalid BTC Wallet address format",
-        path: ["payoutAddress"]
-      });
-    }
-  }
+  payoutAddress: z.string().min(1, "BTC Wallet is required").refine(
+    (val) => btcRegex.test(val),
+    { message: "Invalid BTC Wallet address format" }
+  ),
 })
 
 export async function POST(req: Request) {
   try {
     const body = await req.json()
-    const { email, password, role, payoutAddress } = userSchema.parse(body)
+    const { email, password, payoutAddress } = userSchema.parse(body)
+    const role = "VENDOR" // Only sellers can register
 
     // Check if email already exists
     const existingUser = await prisma.user.findUnique({
@@ -58,7 +41,7 @@ export async function POST(req: Request) {
         email,
         password: hashedPassword,
         role,
-        payoutAddress: role === "VENDOR" ? payoutAddress : undefined
+        payoutAddress
       }
     })
 

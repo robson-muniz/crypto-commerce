@@ -52,10 +52,10 @@ export default function RegisterPage() {
           </div>
         </div>
         <h2 className="text-3xl font-bold tracking-tight text-white">
-          Create Account
+          Create seller account
         </h2>
         <p className="mt-2 text-sm text-gray-400">
-          Start selling with crypto
+          Sellers only: email, password, and BTC wallet
         </p>
       </div>
 
