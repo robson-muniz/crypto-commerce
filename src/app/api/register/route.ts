@@ -3,35 +3,41 @@ import prisma from "@/lib/db"
 import bcrypt from "bcrypt"
 import { z } from "zod"
 
+// BTC address validation regex
+const btcRegex = /^(1|3|bc1|m|n|2|tb1)[a-zA-HJ-NP-Z0-9]{25,62}$/;
+
 const userSchema = z.object({
   email: z.string().email(),
   password: z.string().min(6),
   role: z.enum(["USER", "VENDOR"]).default("USER"),
-  payoutAddress: z.string().optional().refine(
-    (val) => {
-      if (!val) return true; // Optional is fine
-      // Basic Bitcoin address validation (mainnet and testnet)
-      // Mainnet: starts with 1, 3, or bc1
-      // Testnet: starts with m, n, 2, or tb1
-      const btcRegex = /^(1|3|bc1|m|n|2|tb1)[a-zA-HJ-NP-Z0-9]{25,62}$/;
-      return btcRegex.test(val);
-    },
-    { message: "Invalid Bitcoin address format" }
-  )
+  payoutAddress: z.string().optional()
+}).superRefine((data, ctx) => {
+  // For VENDOR role, payoutAddress is required
+  if (data.role === "VENDOR") {
+    if (!data.payoutAddress || data.payoutAddress.trim() === "") {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: "BTC Wallet is required for sellers",
+        path: ["payoutAddress"]
+      });
+      return;
+    }
+    
+    // Validate BTC address format
+    if (!btcRegex.test(data.payoutAddress)) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: "Invalid BTC Wallet address format",
+        path: ["payoutAddress"]
+      });
+    }
+  }
 })
 
 export async function POST(req: Request) {
   try {
     const body = await req.json()
     const { email, password, role, payoutAddress } = userSchema.parse(body)
-
-    // Vendors must provide a payout address
-    if (role === "VENDOR" && !payoutAddress) {
-      return NextResponse.json(
-        { user: null, message: "Bitcoin payout address is required for vendors" },
-        { status: 400 }
-      )
-    }
 
     // Check if email already exists
     const existingUser = await prisma.user.findUnique({

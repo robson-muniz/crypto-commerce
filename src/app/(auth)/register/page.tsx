@@ -123,7 +123,7 @@ export default function RegisterPage() {
             htmlFor="payoutAddress"
             className="block text-sm font-medium text-gray-300 mb-2"
           >
-            Bitcoin Payout Address
+            BTC Wallet
           </label>
           <div className="relative">
             <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -141,7 +141,7 @@ export default function RegisterPage() {
             />
           </div>
           <p className="mt-2 text-xs text-gray-500">
-            Your BTC address where you'll receive payments from sales
+            Your BTC wallet address where you'll receive payments
           </p>
         </div>
 
