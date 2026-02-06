@@ -1,0 +1,10 @@
+{
+  "headers": [
+    {
+      "source": "/register",
+      "headers": [
+        { "key": "Cache-Control", "value": "no-store, must-revalidate" }
+      ]
+    }
+  ]
+}

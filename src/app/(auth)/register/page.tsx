@@ -1,5 +1,6 @@
 "use client"
 
+// Ensure this page is never cached so deploy updates show immediately
 import { useState } from "react"
 import { useRouter } from "next/navigation"
 import Link from "next/link"
@@ -151,7 +152,7 @@ export default function RegisterPage() {
             disabled={loading}
             className="flex w-full justify-center rounded-lg bg-gradient-to-r from-blue-600 to-purple-600 px-4 py-3 text-sm font-medium text-white shadow-lg hover:shadow-purple-900/20 transition-all hover:scale-[1.02] active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"
           >
-            {loading ? "Creating account..." : "Create Account"}
+            {loading ? "Creating seller account..." : "Create seller account"}
           </button>
         </div>
       </form>
