@@ -3,13 +3,13 @@
 import { useState } from "react"
 import { useRouter } from "next/navigation"
 import Link from "next/link"
-import { Lock, Mail, User, Wallet, Sparkles } from "lucide-react"
+import { Lock, Mail, Wallet, Sparkles } from "lucide-react"
 
 export default function RegisterPage() {
   const router = useRouter()
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
-  const [role, setRole] = useState("USER") // Default to Buyer (USER)
+  const [role] = useState("VENDOR") // Always register as seller
   const [payoutAddress, setPayoutAddress] = useState("")
   const [error, setError] = useState("")
   const [loading, setLoading] = useState(false)
@@ -55,7 +55,7 @@ export default function RegisterPage() {
           Create Account
         </h2>
         <p className="mt-2 text-sm text-gray-400">
-          Start buying or selling with crypto
+          Start selling with crypto
         </p>
       </div>
 
@@ -116,58 +116,34 @@ export default function RegisterPage() {
           </div>
         </div>
 
+
+
         <div>
           <label
-            htmlFor="role"
+            htmlFor="payoutAddress"
             className="block text-sm font-medium text-gray-300 mb-2"
           >
-            I want to
+            Bitcoin Payout Address
           </label>
           <div className="relative">
             <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-              <User className="h-5 w-5 text-gray-500" />
+              <Wallet className="h-5 w-5 text-gray-500" />
             </div>
-            <select
-              id="role"
-              name="role"
-              value={role}
-              onChange={(e) => setRole(e.target.value)}
-              className="block w-full rounded-lg border border-white/10 bg-white/5 pl-10 pr-4 py-3 text-white shadow-sm focus:border-purple-500/50 focus:outline-none focus:ring-2 focus:ring-purple-500/20 transition-all appearance-none cursor-pointer"
-            >
-              <option value="USER" className="bg-gray-900">Buy Products</option>
-              <option value="VENDOR" className="bg-gray-900">Sell Products</option>
-            </select>
+            <input
+              id="payoutAddress"
+              name="payoutAddress"
+              type="text"
+              placeholder="bc1q... or tb1q... (Testnet)"
+              required
+              value={payoutAddress}
+              onChange={(e) => setPayoutAddress(e.target.value)}
+              className="block w-full rounded-lg border border-white/10 bg-white/5 pl-10 pr-4 py-3 text-white placeholder:text-gray-500 shadow-sm focus:border-purple-500/50 focus:outline-none focus:ring-2 focus:ring-purple-500/20 transition-all font-mono text-sm"
+            />
           </div>
+          <p className="mt-2 text-xs text-gray-500">
+            Your BTC address where you'll receive payments from sales
+          </p>
         </div>
-
-        {role === "VENDOR" && (
-          <div className="animate-in fade-in slide-in-from-top-2 duration-200">
-            <label
-              htmlFor="payoutAddress"
-              className="block text-sm font-medium text-gray-300 mb-2"
-            >
-              Bitcoin Payout Address
-            </label>
-            <div className="relative">
-              <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                <Wallet className="h-5 w-5 text-gray-500" />
-              </div>
-              <input
-                id="payoutAddress"
-                name="payoutAddress"
-                type="text"
-                placeholder="bc1q... or tb1q... (Testnet)"
-                required={role === "VENDOR"}
-                value={payoutAddress}
-                onChange={(e) => setPayoutAddress(e.target.value)}
-                className="block w-full rounded-lg border border-white/10 bg-white/5 pl-10 pr-4 py-3 text-white placeholder:text-gray-500 shadow-sm focus:border-purple-500/50 focus:outline-none focus:ring-2 focus:ring-purple-500/20 transition-all font-mono text-sm"
-              />
-            </div>
-            <p className="mt-2 text-xs text-gray-500">
-              Your BTC address where you'll receive payments from sales
-            </p>
-          </div>
-        )}
 
         <div className="pt-2">
           <button
