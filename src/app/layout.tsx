@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Outfit } from "next/font/google";
 import Script from "next/script";
+import { Analytics } from "@vercel/analytics/react";
 import "./globals.css";
 
 const outfit = Outfit({ subsets: ["latin"] });
@@ -43,6 +44,7 @@ export default function RootLayout({
       <body className={outfit.className}>
         <NextTopLoader color="#7c3aed" showSpinner={false} />
         {children}
+        <Analytics />
       </body>
     </html>
   );
