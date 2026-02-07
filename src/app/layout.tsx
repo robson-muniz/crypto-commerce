@@ -9,6 +9,9 @@ const outfit = Outfit({ subsets: ["latin"] });
 export const metadata: Metadata = {
   title: "CryptoCommerce - Premium Digital Marketplace",
   description: "Secure, instant, and premium digital asset trading.",
+  icons: {
+    icon: '/icon.png',
+  },
 };
 
 import NextTopLoader from "nextjs-toploader";
