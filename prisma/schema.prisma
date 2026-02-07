@@ -15,6 +15,7 @@ model User {
   password  String?  // Hashed password for email/password auth
   role      String   @default("USER") // USER, VENDOR, ADMIN
   payoutAddress String? // Seller's BTC address for receiving payments
+  storefrontCategory String? // default grouping for the seller (e.g. "ADULT")
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   

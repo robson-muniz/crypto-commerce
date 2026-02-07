@@ -20,6 +20,27 @@ export default async function MarketplacePage() {
     }
   });
 
+  // Fetch sellers that are flagged as ADULT storefronts
+  const sellers = await prisma.user.findMany({
+    where: {
+      role: "VENDOR",
+      OR: [
+        { storefrontCategory: "ADULT" },
+        // Also include those who have adult products even if not explicitly categorized yet, for backward compatibility
+        { products: { some: { category: "ADULT" } } }
+      ]
+    },
+    select: {
+      id: true,
+      email: true,
+      username: true,
+      displayName: true,
+      _count: {
+        select: { products: true }
+      }
+    }
+  });
+
   return (
     <div className="min-h-screen bg-black text-white selection:bg-primary/30 font-sans">
       <header className="border-b border-white/10 bg-black/50 backdrop-blur-md sticky top-0 z-50">
@@ -54,7 +75,7 @@ export default async function MarketplacePage() {
           </p>
         </div>
 
-        <MarketplaceClient products={products} />
+        <MarketplaceClient products={products} sellers={sellers} />
       </main>
     </div>
   );
