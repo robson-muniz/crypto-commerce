@@ -1,7 +1,8 @@
 "use client";
 
+import { useState } from "react";
 import Link from "next/link";
-import { Share2, Copy, Facebook, Twitter, ExternalLink } from "lucide-react";
+import { Copy, Check, ExternalLink } from "lucide-react";
 
 interface Product {
   id: string;
@@ -18,7 +19,8 @@ interface MarketplaceProductProps {
 }
 
 export default function MarketplaceProduct({ product }: MarketplaceProductProps) {
-  // Get the actual URL dynamically
+  const [copied, setCopied] = useState(false);
+
   const getProductUrl = () => {
     if (typeof window !== 'undefined') {
       return `${window.location.origin}/product/${product.id}`;
@@ -26,12 +28,10 @@ export default function MarketplaceProduct({ product }: MarketplaceProductProps)
     return `/product/${product.id}`;
   };
 
-  const getShareLinks = () => {
-    const productUrl = getProductUrl();
-    return {
-      twitter: `https://twitter.com/intent/tweet?text=${encodeURIComponent(`Check out "${product.title}" on CryptoCommerce!`)}&url=${encodeURIComponent(productUrl)}`,
-      facebook: `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(productUrl)}`,
-    };
+  const copyLink = async () => {
+    await navigator.clipboard.writeText(getProductUrl());
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
   };
 
   return (
@@ -46,26 +46,23 @@ export default function MarketplaceProduct({ product }: MarketplaceProductProps)
           </div>
         </div>
 
-        {/* Share Button on Image Hover */}
-        <div className="absolute top-4 right-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col gap-2">
+        {/* Copy Link Button on Image Hover */}
+        <div className="absolute top-4 right-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
           <button
-            onClick={async () => {
-              const productUrl = getProductUrl();
-              if (navigator.share) {
-                await navigator.share({
-                  title: product.title,
-                  text: `Check out "${product.title}" on CryptoCommerce!`,
-                  url: productUrl,
-                });
-              } else {
-                await navigator.clipboard.writeText(productUrl);
-                alert('Link copied to clipboard!');
-              }
-            }}
+            onClick={copyLink}
             className="flex items-center gap-2 px-3 py-2 rounded-full bg-black/80 backdrop-blur-sm text-sm hover:bg-black transition-colors"
           >
-            <Share2 className="size-4" />
-            <span>Share</span>
+            {copied ? (
+              <>
+                <Check className="size-4 text-green-400" />
+                <span className="text-green-400">Copied!</span>
+              </>
+            ) : (
+              <>
+                <Copy className="size-4" />
+                <span>Copy Link</span>
+              </>
+            )}
           </button>
         </div>
       </div>
@@ -94,37 +91,18 @@ export default function MarketplaceProduct({ product }: MarketplaceProductProps)
             </span>
           </div>
 
-          {/* Quick social sharing buttons */}
-          <div className="hidden sm:flex items-center gap-1">
-            <a
-              href={getShareLinks().twitter}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="size-6 rounded-full bg-black/50 hover:bg-black flex items-center justify-center"
-              title="Share on Twitter"
-            >
-              <Twitter className="size-3" />
-            </a>
-            <a
-              href={getShareLinks().facebook}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="size-6 rounded-full bg-blue-600/20 hover:bg-blue-600/30 flex items-center justify-center"
-              title="Share on Facebook"
-            >
-              <Facebook className="size-3" />
-            </a>
-            <button
-              onClick={async () => {
-                await navigator.clipboard.writeText(getProductUrl());
-                alert('Link copied!');
-              }}
-              className="size-6 rounded-full bg-emerald-600/20 hover:bg-emerald-600/30 flex items-center justify-center"
-              title="Copy link"
-            >
-              <Copy className="size-3" />
-            </button>
-          </div>
+          {/* Copy link button */}
+          <button
+            onClick={copyLink}
+            className="size-8 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center transition-colors"
+            title="Copy link"
+          >
+            {copied ? (
+              <Check className="size-4 text-green-400" />
+            ) : (
+              <Copy className="size-4" />
+            )}
+          </button>
         </div>
 
         {/* Price & CTA Section */}
