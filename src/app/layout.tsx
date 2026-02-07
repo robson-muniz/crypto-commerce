@@ -13,8 +13,10 @@ export const metadata: Metadata = {
 
 import NextTopLoader from "nextjs-toploader";
 
+import GoogleAnalytics from "@/components/analytics/GoogleAnalytics";
+
 // Replace with your Google Analytics 4 Measurement ID
-const GA_MEASUREMENT_ID = process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID;
+const GA_MEASUREMENT_ID = process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID || "G-HFGZ7JR724";
 
 export default function RootLayout({
   children,
@@ -24,27 +26,12 @@ export default function RootLayout({
   return (
     <html lang="en" className="dark">
       <head>
-        {GA_MEASUREMENT_ID && (
-          <>
-            <Script
-              src={`https://www.googletagmanager.com/gtag/js?id=${GA_MEASUREMENT_ID}`}
-              strategy="afterInteractive"
-            />
-            <Script id="google-analytics" strategy="afterInteractive">
-              {`
-                window.dataLayer = window.dataLayer || [];
-                function gtag(){dataLayer.push(arguments);}
-                gtag('js', new Date());
-                gtag('config', '${GA_MEASUREMENT_ID}');
-              `}
-            </Script>
-          </>
-        )}
       </head>
       <body className={outfit.className}>
         <NextTopLoader color="#7c3aed" showSpinner={false} />
         {children}
         <Analytics />
+        <GoogleAnalytics GA_MEASUREMENT_ID={GA_MEASUREMENT_ID} />
       </body>
     </html>
   );
