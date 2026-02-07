@@ -2,6 +2,9 @@ import Link from "next/link";
 import prisma from "@/lib/db";
 import MarketplaceProduct from "@/components/MarketplaceProduct";
 
+// Force dynamic rendering to always fetch fresh product data
+export const dynamic = 'force-dynamic';
+
 export default async function MarketplacePage() {
   const products = await prisma.product.findMany({
     orderBy: { createdAt: "desc" },
