@@ -2,6 +2,9 @@ import * as bitcoin from 'bitcoinjs-lib';
 import * as bip32 from 'bip32';
 import * as ecc from '@bitcoinerlab/secp256k1';
 
+// Initialize bitcoinjs-lib with secp256k1
+bitcoin.initEccLib(ecc);
+
 // Initialize BIP32 with Vercel-compatible secp256k1
 const bip32Factory = bip32.BIP32Factory(ecc);
 
@@ -24,11 +27,16 @@ export function getXpub(): string {
 export function deriveAddress(index: number): string {
   try {
     const xpub = getXpub();
+    console.log('Deriving address for index:', index, 'with XPUB:', xpub.substring(0, 20) + '...');
+
     const node = bip32Factory.fromBase58(xpub, NETWORK);
+    console.log('Successfully created BIP32 node');
+
     // Derive external address at index (0/index)
     // We assume the XPUB is already at the account level (e.g. m/84'/0'/0')
     // So we just derive 0/index for receive addresses
     const child = node.derive(0).derive(index);
+    console.log('Successfully derived child node');
 
     const { address } = bitcoin.payments.p2wpkh({
       pubkey: child.publicKey,
@@ -36,9 +44,11 @@ export function deriveAddress(index: number): string {
     });
 
     if (!address) throw new Error('Failed to generate address');
+    console.log('Successfully generated address:', address);
     return address;
   } catch (error) {
-    console.error('Error deriving address:', error);
+    console.error('Error deriving address at index', index, ':', error);
+    console.error('Error stack:', error instanceof Error ? error.stack : 'No stack trace');
     throw new Error('Failed to derive deposit address');
   }
 }
