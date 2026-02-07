@@ -1,6 +1,6 @@
 import Link from "next/link";
 import prisma from "@/lib/db";
-import MarketplaceProduct from "@/components/MarketplaceProduct";
+import MarketplaceClient from "@/components/MarketplaceClient";
 
 // Force dynamic rendering to always fetch fresh product data
 export const dynamic = 'force-dynamic';
@@ -33,7 +33,7 @@ export default async function MarketplacePage() {
       </header>
 
       <main className="container py-12 px-4">
-        <div className="flex flex-col items-center text-center space-y-4 mb-16">
+        <div className="flex flex-col items-center text-center space-y-4 mb-12">
           <h1 className="text-4xl font-extrabold tracking-tight sm:text-5xl text-gradient">
             Marketplace
           </h1>
@@ -42,20 +42,7 @@ export default async function MarketplacePage() {
           </p>
         </div>
 
-        {products.length === 0 ? (
-          <div className="text-center py-20 border border-dashed border-white/10 rounded-3xl">
-            <p className="text-muted-foreground mb-4">No products found.</p>
-            <Link href="/register" className="text-primary hover:underline">
-              Be the first to list a product
-            </Link>
-          </div>
-        ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-            {products.map((product) => (
-              <MarketplaceProduct key={product.id} product={product} />
-            ))}
-          </div>
-        )}
+        <MarketplaceClient products={products} />
       </main>
     </div>
   );

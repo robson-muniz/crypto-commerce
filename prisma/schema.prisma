@@ -29,6 +29,7 @@ model Product {
   description String?
   price       Float    // Price in USD or base currency
   currency    String   @default("USD")
+  category    String   @default("OTHER") // VIDEOS, EBOOKS, CODE, COURSES, ADULT, OTHER
   fileUrl     String   // Path to file in storage (R2/S3)
   vendorId    String
   vendor      User     @relation(fields: [vendorId], references: [id])

@@ -18,6 +18,7 @@ export async function POST(req: Request) {
     const description = formData.get("description") as string
     const price = parseFloat(formData.get("price") as string)
     const currency = formData.get("currency") as string
+    const category = (formData.get("category") as string) || "OTHER"
     const file = formData.get("file") as File
 
     if (!file) {
@@ -52,6 +53,7 @@ export async function POST(req: Request) {
         description,
         price,
         currency,
+        category,
         fileUrl,
         vendorId: session.user.id
       }

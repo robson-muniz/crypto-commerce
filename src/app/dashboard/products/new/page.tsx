@@ -107,6 +107,23 @@ export default function NewProductPage() {
 
         <div>
           <label className="block text-sm font-medium text-gray-300 mb-2">
+            Category
+          </label>
+          <select
+            name="category"
+            className="block w-full rounded-lg border border-white/10 bg-white/5 px-4 py-3 text-white shadow-sm focus:border-purple-500/50 focus:outline-none focus:ring-2 focus:ring-purple-500/20 transition-all"
+          >
+            <option value="VIDEOS" className="bg-gray-900">🎬 Videos</option>
+            <option value="EBOOKS" className="bg-gray-900">📚 eBooks</option>
+            <option value="CODE" className="bg-gray-900">💻 Code / Scripts</option>
+            <option value="COURSES" className="bg-gray-900">🎓 Courses</option>
+            <option value="ADULT" className="bg-gray-900">🔞 Adult (18+)</option>
+            <option value="OTHER" className="bg-gray-900">📦 Other</option>
+          </select>
+        </div>
+
+        <div>
+          <label className="block text-sm font-medium text-gray-300 mb-2">
             Digital File
           </label>
           <input
