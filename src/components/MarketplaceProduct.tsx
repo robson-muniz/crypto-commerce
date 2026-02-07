@@ -18,9 +18,20 @@ interface MarketplaceProductProps {
 }
 
 export default function MarketplaceProduct({ product }: MarketplaceProductProps) {
-  const shareLinks = {
-    twitter: `https://twitter.com/intent/tweet?text=${encodeURIComponent(`Check out "${product.title}" on CryptoCommerce!`)}&url=${encodeURIComponent(`https://cryptocommerce.com/product/${product.id}`)}`,
-    facebook: `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(`https://cryptocommerce.com/product/${product.id}`)}`,
+  // Get the actual URL dynamically
+  const getProductUrl = () => {
+    if (typeof window !== 'undefined') {
+      return `${window.location.origin}/product/${product.id}`;
+    }
+    return `/product/${product.id}`;
+  };
+
+  const getShareLinks = () => {
+    const productUrl = getProductUrl();
+    return {
+      twitter: `https://twitter.com/intent/tweet?text=${encodeURIComponent(`Check out "${product.title}" on CryptoCommerce!`)}&url=${encodeURIComponent(productUrl)}`,
+      facebook: `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(productUrl)}`,
+    };
   };
 
   return (
@@ -39,14 +50,15 @@ export default function MarketplaceProduct({ product }: MarketplaceProductProps)
         <div className="absolute top-4 right-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col gap-2">
           <button
             onClick={async () => {
+              const productUrl = getProductUrl();
               if (navigator.share) {
                 await navigator.share({
                   title: product.title,
                   text: `Check out "${product.title}" on CryptoCommerce!`,
-                  url: `https://cryptocommerce.com/product/${product.id}`,
+                  url: productUrl,
                 });
               } else {
-                await navigator.clipboard.writeText(`https://cryptocommerce.com/product/${product.id}`);
+                await navigator.clipboard.writeText(productUrl);
                 alert('Link copied to clipboard!');
               }
             }}
@@ -85,7 +97,7 @@ export default function MarketplaceProduct({ product }: MarketplaceProductProps)
           {/* Quick social sharing buttons */}
           <div className="hidden sm:flex items-center gap-1">
             <a
-              href={shareLinks.twitter}
+              href={getShareLinks().twitter}
               target="_blank"
               rel="noopener noreferrer"
               className="size-6 rounded-full bg-black/50 hover:bg-black flex items-center justify-center"
@@ -94,7 +106,7 @@ export default function MarketplaceProduct({ product }: MarketplaceProductProps)
               <Twitter className="size-3" />
             </a>
             <a
-              href={shareLinks.facebook}
+              href={getShareLinks().facebook}
               target="_blank"
               rel="noopener noreferrer"
               className="size-6 rounded-full bg-blue-600/20 hover:bg-blue-600/30 flex items-center justify-center"
@@ -104,7 +116,7 @@ export default function MarketplaceProduct({ product }: MarketplaceProductProps)
             </a>
             <button
               onClick={async () => {
-                await navigator.clipboard.writeText(`https://cryptocommerce.com/product/${product.id}`);
+                await navigator.clipboard.writeText(getProductUrl());
                 alert('Link copied!');
               }}
               className="size-6 rounded-full bg-emerald-600/20 hover:bg-emerald-600/30 flex items-center justify-center"
