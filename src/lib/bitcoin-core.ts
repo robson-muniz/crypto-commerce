@@ -17,7 +17,7 @@ const API_BASE_URL = process.env.BTC_NETWORK === 'mainnet'
   : 'https://mempool.space/testnet/api';
 
 export function getXpub(): string {
-  const xpub = process.env.BTC_XPUB;
+  const xpub = process.env.BTC_XPUB?.trim();
   if (!xpub) {
     throw new Error('BTC_XPUB environment variable is not set');
   }
