@@ -8,7 +8,16 @@ export const dynamic = 'force-dynamic';
 export default async function MarketplacePage() {
   const products = await prisma.product.findMany({
     orderBy: { createdAt: "desc" },
-    include: { vendor: { select: { email: true } } }
+    include: {
+      vendor: {
+        select: {
+          id: true,
+          email: true,
+          username: true, // For linking to seller page
+          displayName: true // For displaying seller name
+        }
+      }
+    }
   });
 
   return (
@@ -22,6 +31,9 @@ export default async function MarketplacePage() {
             <span className="text-gradient">CryptoCommerce</span>
           </Link>
           <div className="flex items-center gap-4">
+            <Link href="/sellers" className="text-sm font-medium hover:text-primary transition-colors">
+              Sellers
+            </Link>
             <Link href="/login" className="text-sm font-medium hover:text-primary transition-colors">
               Seller Login
             </Link>

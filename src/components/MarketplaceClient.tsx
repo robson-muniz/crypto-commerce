@@ -21,7 +21,10 @@ interface Product {
   price: number;
   category: string;
   vendor: {
+    id: string;
     email: string | null;
+    username: string | null;
+    displayName: string | null;
   };
 }
 
@@ -64,8 +67,8 @@ export default function MarketplaceClient({ products }: MarketplaceClientProps) 
             key={cat.value}
             onClick={() => setActiveCategory(cat.value)}
             className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${activeCategory === cat.value
-                ? "bg-gradient-to-r from-primary to-secondary text-white shadow-lg shadow-primary/25"
-                : "bg-white/5 text-gray-400 hover:bg-white/10 hover:text-white border border-white/10"
+              ? "bg-gradient-to-r from-primary to-secondary text-white shadow-lg shadow-primary/25"
+              : "bg-white/5 text-gray-400 hover:bg-white/10 hover:text-white border border-white/10"
               }`}
           >
             {cat.icon} {cat.label}
@@ -140,16 +143,19 @@ export default function MarketplaceClient({ products }: MarketplaceClientProps) 
 
                 {/* Vendor Info */}
                 <div className="flex items-center justify-between mb-4">
-                  <div className="flex items-center gap-2">
-                    <div className="size-6 rounded-full bg-gradient-to-br from-primary/20 to-secondary/20 flex items-center justify-center">
-                      <span className="text-xs font-bold">
-                        {product.vendor.email?.[0]?.toUpperCase() || "V"}
+                  <Link
+                    href={`/seller/${product.vendor.username || product.vendor.id}`}
+                    className="flex items-center gap-2 group/vendor hover:opacity-80 transition-opacity"
+                  >
+                    <div className="size-6 rounded-full bg-gradient-to-br from-primary/20 to-secondary/20 flex items-center justify-center border border-white/10">
+                      <span className="text-xs font-bold leading-none">
+                        {product.vendor.displayName?.match(/\p{Emoji}/gu)?.[0] || product.vendor.email?.[0]?.toUpperCase() || "👤"}
                       </span>
                     </div>
-                    <span className="text-xs text-muted-foreground">
-                      {product.vendor.email?.split('@')[0] || "Verified Seller"}
+                    <span className="text-xs text-muted-foreground group-hover/vendor:text-primary transition-colors">
+                      {product.vendor.displayName || product.vendor.email?.split('@')[0] || "Verified Seller"}
                     </span>
-                  </div>
+                  </Link>
 
                   {/* Copy link button */}
                   <button
