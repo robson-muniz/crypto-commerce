@@ -7,6 +7,9 @@ export const dynamic = 'force-dynamic';
 
 export default async function MarketplacePage() {
   const products = await prisma.product.findMany({
+    where: {
+      category: { not: "ADULT" } // Exclude ADULT content from initial load for SEO/Safety
+    },
     orderBy: { createdAt: "desc" },
     include: {
       vendor: {
@@ -20,26 +23,9 @@ export default async function MarketplacePage() {
     }
   });
 
-  // Fetch sellers that are flagged as ADULT storefronts
-  const sellers = await prisma.user.findMany({
-    where: {
-      role: "VENDOR",
-      OR: [
-        { storefrontCategory: "ADULT" },
-        // Also include those who have adult products even if not explicitly categorized yet, for backward compatibility
-        { products: { some: { category: "ADULT" } } }
-      ]
-    },
-    select: {
-      id: true,
-      email: true,
-      username: true,
-      displayName: true,
-      _count: {
-        select: { products: true }
-      }
-    }
-  });
+  // Sellers for Adult folder view are now loaded lazily via Server Action
+  // to prevent "Adult" keywords from appearing in the initial HTML payload.
+  const sellers: any[] = [];
 
   return (
     <div className="min-h-screen bg-black text-white selection:bg-primary/30 font-sans">

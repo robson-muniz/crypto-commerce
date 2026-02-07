@@ -2,7 +2,8 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { Copy, Check, ExternalLink } from "lucide-react";
+import { Copy, Check, ExternalLink, Loader2 } from "lucide-react";
+import { getAdultContent } from "@/app/actions/marketplace";
 
 const CATEGORIES = [
   { value: "ALL", label: "All", icon: "🛒" },
@@ -43,9 +44,32 @@ interface MarketplaceClientProps {
   sellers: Seller[];
 }
 
-export default function MarketplaceClient({ products, sellers }: MarketplaceClientProps) {
+export default function MarketplaceClient({ products: initialProducts, sellers: initialSellers }: MarketplaceClientProps) {
   const [activeCategory, setActiveCategory] = useState("ALL");
+  const [products, setProducts] = useState(initialProducts);
+  const [sellers, setSellers] = useState(initialSellers);
   const [copiedId, setCopiedId] = useState<string | null>(null);
+  const [loadingAdult, setLoadingAdult] = useState(false);
+  const [loadedAdult, setLoadedAdult] = useState(false);
+
+  const handleCategoryChange = async (category: string) => {
+    if (category === "ADULT" && !loadedAdult) {
+      setLoadingAdult(true);
+      try {
+        const data = await getAdultContent();
+        // @ts-ignore - types might slightly differ in strict mode but structure is same
+        setProducts(prev => [...prev, ...data.products]);
+        // @ts-ignore
+        setSellers(prev => [...prev, ...data.sellers]);
+        setLoadedAdult(true);
+      } catch (error) {
+        console.error("Failed to load adult content", error);
+      } finally {
+        setLoadingAdult(false);
+      }
+    }
+    setActiveCategory(category);
+  };
 
   const filteredProducts = activeCategory === "ALL"
     ? products
@@ -76,13 +100,18 @@ export default function MarketplaceClient({ products, sellers }: MarketplaceClie
         {CATEGORIES.map((cat) => (
           <button
             key={cat.value}
-            onClick={() => setActiveCategory(cat.value)}
+            onClick={() => handleCategoryChange(cat.value)}
+            disabled={loadingAdult && cat.value === "ADULT"}
             className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${activeCategory === cat.value
               ? "bg-gradient-to-r from-primary to-secondary text-white shadow-lg shadow-primary/25"
               : "bg-white/5 text-gray-400 hover:bg-white/10 hover:text-white border border-white/10"
-              }`}
+              } ${loadingAdult && cat.value === "ADULT" ? "opacity-50 cursor-wait" : ""}`}
           >
-            {cat.icon} {cat.label}
+            {loadingAdult && cat.value === "ADULT" ? (
+              <Loader2 className="animate-spin inline mr-1 size-4" />
+            ) : (
+              cat.icon
+            )} {cat.label}
           </button>
         ))}
       </div>
