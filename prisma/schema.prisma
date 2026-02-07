@@ -82,3 +82,15 @@ model Wallet {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
+
+// Pre-generated Bitcoin addresses for checkout
+// These are generated locally and stored in the database
+// to avoid runtime address derivation on Vercel serverless
+model BitcoinAddress {
+  id        String   @id @default(cuid())
+  address   String   @unique
+  index     Int      @unique  // HD wallet derivation index (0, 1, 2...)
+  used      Boolean  @default(false)
+  orderId   String?  @unique  // Links to order when address is used
+  createdAt DateTime @default(now())
+}

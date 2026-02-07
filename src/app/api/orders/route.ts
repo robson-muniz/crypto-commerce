@@ -2,7 +2,6 @@ import { NextResponse } from "next/server"
 import prisma from "@/lib/db"
 import { getServerSession } from "next-auth"
 import { authOptions } from "@/lib/auth"
-import { deriveAddress } from "@/lib/bitcoin-core"
 
 export async function POST(req: Request) {
   try {
@@ -19,33 +18,36 @@ export async function POST(req: Request) {
       return NextResponse.json({ message: "Product not found" }, { status: 404 })
     }
 
-    // Get next address index
-    const lastOrder = await prisma.order.findFirst({
-      orderBy: { addressIndex: 'desc' },
-      select: { addressIndex: true }
+    // Get an unused pre-generated Bitcoin address from the database
+    const bitcoinAddress = await prisma.bitcoinAddress.findFirst({
+      where: { used: false },
+      orderBy: { index: 'asc' }
     })
-    const nextIndex = (lastOrder?.addressIndex ?? 0) + 1
 
-    // Generate deposit address from HD Wallet
-    const paymentAddress = deriveAddress(nextIndex)
+    if (!bitcoinAddress) {
+      console.error("No available Bitcoin addresses in database!")
+      return NextResponse.json({
+        message: "No payment addresses available. Please contact support."
+      }, { status: 503 })
+    }
 
-    // Calculate BTC amount
-    // Fetch price from Mempool.space or CoinGecko
+    // Calculate BTC amount from current price
     let amountBtc = 0;
     try {
       const priceRes = await fetch("https://mempool.space/api/v1/prices");
       const priceData = await priceRes.json();
-      const btcPriceUsd = priceData.USD; // e.g. 50000
+      const btcPriceUsd = priceData.USD;
 
       if (btcPriceUsd > 0) {
         amountBtc = Number((product.price / btcPriceUsd).toFixed(8));
       }
     } catch (e) {
       console.error("Failed to fetch BTC price:", e);
-      // Fallback for Testnet if API fails (approx price)
+      // Fallback price if API fails
       amountBtc = Number((product.price / 100000).toFixed(8));
     }
 
+    // Create the order with the pre-generated address
     const order = await prisma.order.create({
       data: {
         productId,
@@ -54,11 +56,22 @@ export async function POST(req: Request) {
         amountBtc: amountBtc,
         currency: product.currency,
         status: "PENDING",
-        paymentAddress,
-        addressIndex: nextIndex,
-        downloadUrl: null // Will be set upon completion
+        paymentAddress: bitcoinAddress.address,
+        addressIndex: bitcoinAddress.index,
+        downloadUrl: null
       }
     })
+
+    // Mark the address as used
+    await prisma.bitcoinAddress.update({
+      where: { id: bitcoinAddress.id },
+      data: {
+        used: true,
+        orderId: order.id
+      }
+    })
+
+    console.log(`Order ${order.id} created with address ${bitcoinAddress.address} (index: ${bitcoinAddress.index})`)
 
     return NextResponse.json(order, { status: 201 })
   } catch (error: any) {
