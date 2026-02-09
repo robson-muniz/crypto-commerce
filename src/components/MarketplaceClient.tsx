@@ -3,7 +3,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import { Copy, Check, ExternalLink, Loader2 } from "lucide-react";
-import { getAdultContent } from "@/app/actions/marketplace";
+import { getMiniTubeContent } from "@/app/actions/marketplace";
 
 const CATEGORIES = [
   { value: "ALL", label: "All", icon: "🛒" },
@@ -11,7 +11,7 @@ const CATEGORIES = [
   { value: "EBOOKS", label: "eBooks", icon: "📚" },
   { value: "CODE", label: "Code", icon: "💻" },
   { value: "COURSES", label: "Courses", icon: "🎓" },
-  { value: "ADULT", label: "Adult", icon: "🔞" },
+  { value: "MINITUBE", label: "Mini-Tube", icon: "📹" },
   { value: "OTHER", label: "Other", icon: "📦" },
 ];
 
@@ -49,23 +49,23 @@ export default function MarketplaceClient({ products: initialProducts, sellers: 
   const [products, setProducts] = useState(initialProducts);
   const [sellers, setSellers] = useState(initialSellers);
   const [copiedId, setCopiedId] = useState<string | null>(null);
-  const [loadingAdult, setLoadingAdult] = useState(false);
-  const [loadedAdult, setLoadedAdult] = useState(false);
+  const [loadingMiniTube, setLoadingMiniTube] = useState(false);
+  const [loadedMiniTube, setLoadedMiniTube] = useState(false);
 
   const handleCategoryChange = async (category: string) => {
-    if (category === "ADULT" && !loadedAdult) {
-      setLoadingAdult(true);
+    if (category === "MINITUBE" && !loadedMiniTube) {
+      setLoadingMiniTube(true);
       try {
-        const data = await getAdultContent();
+        const data = await getMiniTubeContent();
         // @ts-ignore - types might slightly differ in strict mode but structure is same
         setProducts(prev => [...prev, ...data.products]);
         // @ts-ignore
         setSellers(prev => [...prev, ...data.sellers]);
-        setLoadedAdult(true);
+        setLoadedMiniTube(true);
       } catch (error) {
-        console.error("Failed to load adult content", error);
+        console.error("Failed to load mini-tube content", error);
       } finally {
-        setLoadingAdult(false);
+        setLoadingMiniTube(false);
       }
     }
     setActiveCategory(category);
@@ -101,13 +101,13 @@ export default function MarketplaceClient({ products: initialProducts, sellers: 
           <button
             key={cat.value}
             onClick={() => handleCategoryChange(cat.value)}
-            disabled={loadingAdult && cat.value === "ADULT"}
+            disabled={loadingMiniTube && cat.value === "MINITUBE"}
             className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${activeCategory === cat.value
               ? "bg-gradient-to-r from-primary to-secondary text-white shadow-lg shadow-primary/25"
               : "bg-white/5 text-gray-400 hover:bg-white/10 hover:text-white border border-white/10"
-              } ${loadingAdult && cat.value === "ADULT" ? "opacity-50 cursor-wait" : ""}`}
+              } ${loadingMiniTube && cat.value === "MINITUBE" ? "opacity-50 cursor-wait" : ""}`}
           >
-            {loadingAdult && cat.value === "ADULT" ? (
+            {loadingMiniTube && cat.value === "MINITUBE" ? (
               <Loader2 className="animate-spin inline mr-1 size-4" />
             ) : (
               cat.icon
@@ -116,8 +116,8 @@ export default function MarketplaceClient({ products: initialProducts, sellers: 
         ))}
       </div>
 
-      {/* Adult Category Special View: Seller Folders */}
-      {activeCategory === "ADULT" ? (
+      {/* Mini-Tube Category Special View: Seller Folders */}
+      {activeCategory === "MINITUBE" ? (
         <div className="space-y-12">
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {sellers.map((seller) => (
@@ -147,7 +147,7 @@ export default function MarketplaceClient({ products: initialProducts, sellers: 
               For now, the user wants "folders", so we focus on that. 
               But let's show products below just in case, or hide them? 
               User said "put them inside a folder", implying hierarchy.
-              Let's hide the loose products grid when in ADULT mode and just show folders.
+              Let's hide the loose products grid when in MINITUBE mode and just show folders.
           */}
         </div>
       ) : (

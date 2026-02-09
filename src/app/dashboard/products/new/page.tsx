@@ -117,7 +117,7 @@ export default function NewProductPage() {
             <option value="EBOOKS" className="bg-gray-900">📚 eBooks</option>
             <option value="CODE" className="bg-gray-900">💻 Code / Scripts</option>
             <option value="COURSES" className="bg-gray-900">🎓 Courses</option>
-            <option value="ADULT" className="bg-gray-900">🔞 Adult (18+)</option>
+            <option value="MINITUBE" className="bg-gray-900">📹 Mini-Tube (Short Videos)</option>
             <option value="OTHER" className="bg-gray-900">📦 Other</option>
           </select>
         </div>

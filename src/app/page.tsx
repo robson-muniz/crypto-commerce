@@ -61,13 +61,13 @@ export default function Home() {
             </div>
 
             <h1 className="max-w-4xl text-5xl font-black tracking-tight sm:text-7xl mb-6">
-              Turn Your Digital Files Into
+              Sell SFW Digital Creations Into
               <br />
               <span className="text-gradient">Passive Crypto Income</span>
             </h1>
 
             <p className="mx-auto max-w-[700px] text-lg text-muted-foreground md:text-xl mb-10 leading-relaxed">
-              <span className="font-semibold text-white">Sell once, earn forever.</span> Automated crypto payments. Zero chargebacks.
+              <span className="font-semibold text-white">Videos, templates, code, ebooks.</span> Automated crypto payments. Zero chargebacks.
               Global audience. Start earning in <span className="text-primary font-bold">under 5 minutes</span>.
             </p>
 

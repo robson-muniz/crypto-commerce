@@ -2,11 +2,11 @@
 
 import prisma from "@/lib/db";
 
-export async function getAdultContent() {
+export async function getMiniTubeContent() {
   try {
     const products = await prisma.product.findMany({
       where: {
-        category: "ADULT",
+        category: "MINITUBE",
       },
       orderBy: {
         createdAt: "desc",
@@ -27,8 +27,8 @@ export async function getAdultContent() {
       where: {
         role: "VENDOR",
         OR: [
-          { storefrontCategory: "ADULT" },
-          { products: { some: { category: "ADULT" } } },
+          { storefrontCategory: "MINITUBE" },
+          { products: { some: { category: "MINITUBE" } } },
         ],
       },
       select: {
@@ -44,7 +44,7 @@ export async function getAdultContent() {
 
     return { products, sellers };
   } catch (error) {
-    console.error("Failed to fetch adult content:", error);
+    console.error("Failed to fetch mini-tube content:", error);
     return { products: [], sellers: [] };
   }
 }

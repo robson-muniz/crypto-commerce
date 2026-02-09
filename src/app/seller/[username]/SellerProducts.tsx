@@ -17,7 +17,7 @@ const CATEGORY_ICONS: Record<string, string> = {
   EBOOKS: "📚",
   CODE: "💻",
   COURSES: "🎓",
-  ADULT: "🔞",
+  MINITUBE: "📹",
   OTHER: "📦",
 };
 

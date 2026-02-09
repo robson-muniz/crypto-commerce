@@ -15,7 +15,7 @@ model User {
   password  String?  // Hashed password for email/password auth
   role      String   @default("USER") // USER, VENDOR, ADMIN
   payoutAddress String? // Seller's BTC address for receiving payments
-  storefrontCategory String? // default grouping for the seller (e.g. "ADULT")
+  storefrontCategory String? // default grouping for the seller (e.g. "MINITUBE")
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   
@@ -32,7 +32,7 @@ model Product {
   description String?
   price       Float    // Price in USD or base currency
   currency    String   @default("USD")
-  category    String   @default("OTHER") // VIDEOS, EBOOKS, CODE, COURSES, ADULT, OTHER
+  category    String   @default("OTHER") // VIDEOS, EBOOKS, CODE, COURSES, MINITUBE, OTHER
   fileUrl     String   // Path to file in storage (R2/S3)
   vendorId    String
   vendor      User     @relation(fields: [vendorId], references: [id])

@@ -8,7 +8,7 @@ export const dynamic = 'force-dynamic';
 export default async function MarketplacePage() {
   const products = await prisma.product.findMany({
     where: {
-      category: { not: "ADULT" } // Exclude ADULT content from initial load for SEO/Safety
+      category: { not: "MINITUBE" } // Exclude MINITUBE content from initial load for SEO/Safety
     },
     orderBy: { createdAt: "desc" },
     include: {
@@ -23,8 +23,8 @@ export default async function MarketplacePage() {
     }
   });
 
-  // Sellers for Adult folder view are now loaded lazily via Server Action
-  // to prevent "Adult" keywords from appearing in the initial HTML payload.
+  // Sellers for Mini-Tube folder view are now loaded lazily via Server Action
+  // to prevent "Mini-Tube" keywords from appearing in the initial HTML payload.
   const sellers: any[] = [];
 
   return (
