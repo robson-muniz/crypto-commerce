@@ -1,135 +1,114 @@
-# CryptoCommerce
+# CryptoCommerce - Premium Digital Marketplace
 
-![CryptoCommerce Banner](https://via.placeholder.com/1200x400.png?text=CryptoCommerce+Premium+Platform)
+![Next.js](https://img.shields.io/badge/Next.js-16.1-black?style=for-the-badge&logo=next.js&logoColor=white)
+![TypeScript](https://img.shields.io/badge/TypeScript-5.0-blue?style=for-the-badge&logo=typescript&logoColor=white)
+![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-4.0-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white)
+![Prisma](https://img.shields.io/badge/Prisma-5.0-2D3748?style=for-the-badge&logo=prisma&logoColor=white)
+![Bitcoin](https://img.shields.io/badge/Bitcoin-Network-F7931A?style=for-the-badge&logo=bitcoin&logoColor=white)
 
-> **The Future of Digital Commerce.**
-> Sell digital goods powered by crypto. Instant global payments, secure delivery, and zero chargebacks.
+> **A high-performance, decentralized digital marketplace built for the modern web.** experience seamless crypto payments, instant digital delivery, and a glassmorphic UI that pushes the boundaries of design.
 
-CryptoCommerce is a premium, decentralized marketplace platform designed for the modern creator economy. Built with cutting-edge technologies, it ensures meaningful transactions, complete security, and a stunning user experience.
-
----
-
-## 🚀 Key Features
-
--   **💎 Premium Glassmorphism UI:** A sleek, modern interface with beautiful gradients and animations.
--   **🔐 Secure Authentication:** Robust user and vendor authentication system powered by NextAuth.js.
--   **🛡️ Fraud Protection:** Smart contracts verify every transaction, eliminating chargebacks.
--   **⚡ Instant Delivery:** Automated system delivers digital files immediately after payment confirmation.
--   **🌍 Global Payments:** Accept Bitcoin from anyone, anywhere with real BTC mainnet support.
--   **📱 Fully Responsive:** Optimized for mobile, tablet, and desktop devices.
+[Live Demo](https://www.cryptocommerce.pt) · [Report Bug](https://github.com/robson-muniz/crypto-commerce/issues) · [Request Feature](https://github.com/robson-muniz/crypto-commerce/issues)
 
 ---
+
+## 📸 Product Overview
+
+![Application Screenshot](./public/assets/project-screenshot.png)
+
+## 🏗️ Technical Architecture
+
+CryptoCommerce is engineered with **robustness, security, and scalability** as first principles. It leverages the full power of the **Next.js 16 App Router** to deliver a server-first experience that minimizes client-side JavaScript wile maintaining interactivity.
+
+### Key Architectural Decisions:
+*   **Server Actions & RPC**: All data mutations (checkout, product creation, updates) handling via Server Actions blocks, ensuring type safety from DB to UI without manual API routes.
+*   **HD Wallet Integration**: Implements BIP32/BIP39 standards to generate unique derived addresses for every transaction, eliminating address reuse and enhancing privacy.
+*   **Glassmorphism Design System**: A custom Tailwind v4 configuration utilizing backdrop filters, gradients, and semantic tokens to create a "premium" dark-mode aesthetic.
+*   **Database First**: Schema-driven development using Prisma ORM ensures strict data integrity for orders, products, and user sessions.
 
 ## 🛠️ Tech Stack
 
-This project is built with a modern, scalable technology stack:
+### Core
+*   **Framework**: Next.js 16 (App Router, Server Components)
+*   **Language**: TypeScript (Strict Mode)
+*   **Styling**: TailwindCSS, Framer Motion, Lucide React
+*   **Forms**: React Hook Form + Zod Validation
 
--   **Frontend:** [Next.js 15](https://nextjs.org/) (App Router), [React](https://react.dev/), [Lucide Icons](https://lucide.dev/)
--   **Styling:** [Tailwind CSS v4](https://tailwindcss.com/) with custom premium theme & glassmorphism utilities
--   **Backend:** Next.js API Routes (Serverless)
--   **Database:** [SQLite](https://www.sqlite.org/) (Dev) / Postgres (Prod) managed via [Prisma ORM](https://www.prisma.io/)
--   **Authentication:** [NextAuth.js](https://next-auth.js.org/)
--   **Payments:** Bitcoin mainnet/testnet with HD wallet derivation (BIP84)
--   **Validation:** [Zod](https://zod.dev/)
+### Backend & Data
+*   **Database**: PostgreSQL (via Supabase/Neon/Vercel Postgres)
+*   **ORM**: Prisma
+*   **Authentication**: NextAuth.js v5 (Beta)
 
----
+### Cryptography & Payments
+*   **Bitcoin Libs**: `bitcoinjs-lib`, `bip32`, `bip39`
+*   **UTXO Management**: Custom logic for address derivation and payment monitoring.
 
-## 🏁 Getting Started
+## 🚀 Getting Started
 
-Follow these steps to set up the project locally:
+Follow these instructions to get a local copy of the project up and running.
 
 ### Prerequisites
-
--   Node.js 18+
--   npm or yarn
+*   Node.js 18+
+*   npm or pnpm
+*   PostgreSQL Database URL
 
 ### Installation
 
-1.  **Clone the repository:**
+1.  **Clone the repository**
     ```bash
-    git clone https://github.com/yourusername/crypto-commerce.git
+    git clone https://github.com/robson-muniz/crypto-commerce.git
     cd crypto-commerce
     ```
 
-2.  **Install dependencies:**
+2.  **Install dependencies**
     ```bash
     npm install
+    # or
+    pnpm install
     ```
 
-3.  **Set up environment variables:**
+3.  **Environment Setup**
     Create a `.env` file in the root directory:
     ```env
-    DATABASE_URL="file:./dev.db" # Or your postgres URL
+    DATABASE_URL="postgresql://user:password@localhost:5432/cryptocommerce"
+    NEXTAUTH_SECRET="super_secure_secret"
     NEXTAUTH_URL="http://localhost:3000"
-    NEXTAUTH_SECRET="your-super-secret-key"
-    
-    # Bitcoin Configuration
-    # For development/testing, use TESTNET:
-    BTC_NETWORK="testnet"
-    # Generate a testnet wallet: node generate-wallet.js
-    BTC_XPUB="your-testnet-xpub-here"
     ```
-    
-    > **⚠️ For production deployment with real BTC, see [DEPLOYMENT_GUIDE.md](DEPLOYMENT_GUIDE.md)**
 
-4.  **Initialize the database:**
+4.  **Database Migration**
     ```bash
     npx prisma generate
     npx prisma db push
     ```
 
-5.  **Run the development server:**
+5.  **Run Development Server**
     ```bash
     npm run dev
     ```
 
-    Open [http://localhost:3000](http://localhost:3000) to view the app.
-
-### Production Deployment
-
-To deploy with **real Bitcoin mainnet** payments on Vercel:
-
-📘 **See the comprehensive [DEPLOYMENT_GUIDE.md](DEPLOYMENT_GUIDE.md)** for step-by-step instructions including:
-- Mainnet wallet generation
-- Vercel environment configuration  
-- Database setup
-- Testing with real BTC
-- Security best practices
-- Troubleshooting
-
-> [!CAUTION]
-> Mainnet deployment involves real Bitcoin. Test thoroughly with small amounts first.
-
----
+    Open [http://localhost:3000](http://localhost:3000) to view the application.
 
 ## 📂 Project Structure
 
 ```bash
-├── 📁 prisma/          # Database schema and migrations
-├── 📁 public/          # Static assets
-├── 📁 src/
-│   ├── 📁 app/         # Next.js App Router pages & API
-│   ├── 📁 components/  # Reusable React components
-│   ├── 📁 lib/         # Utility functions & configs
-│   └── 📁 types/       # TypeScript type definitions
-└── 📄 package.json     # Project dependencies
+crypto-commerce/
+├── prisma/               # Database schema and migrations
+├── public/               # Static assets
+│   └── assets/           # Project screenshots and branding
+├── src/
+│   ├── app/              # Next.js App Router pages & layouts
+│   ├── components/       # Reusable UI components (Atomic design)
+│   ├── lib/              # Utilities, DB clients, and Crypto logic
+│   ├── types/            # Global TypeScript definitions
+│   └── actions/          # Server Actions (Business Logic)
+└── tailwind.config.ts    # Design system configuration
 ```
 
----
+## 🔒 Security
 
-## 🤝 Contributing
-
-Contributions are welcome! Please feel free to submit a Pull Request.
-
----
-
-## 📄 License
-
-This project is open source and available under the [MIT License](LICENSE).
+*   **Private Key Management**: Private keys are **never** exposed to the client. All signing happens server-side or via secure hardware wallet integration logic (if applicable).
+*   **Data Validation**: All inputs are sanitized via Zod schemas before hitting the database.
 
 ---
 
-<div align="center">
-  <p>Build with love a lost of coffe by <strong>Robson Muniz, Portugal</strong></p>
-</div>
-# Force fresh rebuild
+Built with ❤️ by [Robson Muniz](https://github.com/robson-muniz)
