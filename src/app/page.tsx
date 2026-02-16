@@ -414,16 +414,16 @@ export default function Home() {
             </div>
 
             <nav className="flex gap-6 sm:gap-10">
-              <Link className="text-sm text-muted-foreground hover:text-white transition-colors hover:underline underline-offset-4" href="#">
+              <Link className="text-sm text-muted-foreground hover:text-white transition-colors hover:underline underline-offset-4" href="/terms">
                 Terms
               </Link>
-              <Link className="text-sm text-muted-foreground hover:text-white transition-colors hover:underline underline-offset-4" href="#">
+              <Link className="text-sm text-muted-foreground hover:text-white transition-colors hover:underline underline-offset-4" href="/privacy">
                 Privacy
               </Link>
-              <Link className="text-sm text-muted-foreground hover:text-white transition-colors hover:underline underline-offset-4" href="#">
+              <Link className="text-sm text-muted-foreground hover:text-white transition-colors hover:underline underline-offset-4" href="/contact">
                 Contact
               </Link>
-              <Link className="text-sm text-muted-foreground hover:text-white transition-colors hover:underline underline-offset-4" href="#">
+              <Link className="text-sm text-muted-foreground hover:text-white transition-colors hover:underline underline-offset-4" href="/help">
                 Help Center
               </Link>
             </nav>
