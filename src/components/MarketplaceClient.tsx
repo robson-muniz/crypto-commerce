@@ -218,16 +218,16 @@ export default function MarketplaceClient({ products: initialProducts, sellers: 
                   {/* Vendor Info */}
                   <div className="flex items-center justify-between mb-4">
                     <Link
-                      href={`/seller/${product.vendor.username || product.vendor.id}`}
+                      href={`/seller/${product.vendor?.username || product.vendor?.id}`}
                       className="flex items-center gap-2 group/vendor hover:opacity-80 transition-opacity"
                     >
                       <div className="size-6 rounded-full bg-gradient-to-br from-primary/20 to-secondary/20 flex items-center justify-center border border-white/10">
                         <span className="text-xs font-bold leading-none">
-                          {product.vendor.displayName?.match(/\p{Emoji}/gu)?.[0] || product.vendor.email?.[0]?.toUpperCase() || "👤"}
+                          {product.vendor?.displayName?.match(/\p{Emoji}/gu)?.[0] || product.vendor?.email?.[0]?.toUpperCase() || "👤"}
                         </span>
                       </div>
                       <span className="text-xs text-muted-foreground group-hover/vendor:text-primary transition-colors">
-                        {product.vendor.displayName || product.vendor.email?.split('@')[0] || "Verified Seller"}
+                        {product.vendor?.displayName || product.vendor?.email?.split('@')[0] || "Verified Seller"}
                       </span>
                     </Link>
 

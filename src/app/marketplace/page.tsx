@@ -23,6 +23,27 @@ export default async function MarketplacePage() {
     }
   });
 
+
+
+  // Filter out any products that might have missing relations (data integrity)
+  // and serialize dates to strings to avoid "Date cannot be passed to Client Component" warnings
+  const safeProducts = products
+    .filter(p => p.vendor) // Ensure vendor exists
+    .map(p => ({
+      ...p,
+      createdAt: p.createdAt.toISOString(),
+      updatedAt: p.updatedAt.toISOString(),
+      price: Number(p.price), // Ensure price is a number
+      vendor: {
+        ...p.vendor,
+        // Ensure vendor properties are strings or null, never undefined
+        username: p.vendor.username || null,
+        displayName: p.vendor.displayName || null,
+        email: p.vendor.email,
+        id: p.vendor.id
+      }
+    }));
+
   // Sellers for Mini-Tube folder view are now loaded lazily via Server Action
   // to prevent "Mini-Tube" keywords from appearing in the initial HTML payload.
   const sellers: any[] = [];
@@ -61,7 +82,7 @@ export default async function MarketplacePage() {
           </p>
         </div>
 
-        <MarketplaceClient products={products} sellers={sellers} />
+        <MarketplaceClient products={safeProducts} sellers={sellers} />
       </main>
     </div>
   );
