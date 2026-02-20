@@ -19,13 +19,14 @@ export default async function SettingsPage() {
     },
   })
 
-  // Calculate balance from completed orders
+  // Calculate balance from completed orders that haven't been paid out yet
   const orders = await db.order.findMany({
     where: {
       product: {
         vendorId: session.user.id,
       },
       status: "COMPLETED",
+      payoutTxHash: null,
     },
     select: {
       amount: true,

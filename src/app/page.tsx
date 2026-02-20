@@ -203,7 +203,7 @@ export default function Home() {
                   color: "from-orange-500/20 to-orange-500/5",
                   iconColor: "text-orange-400",
                   title: "Lowest Fees",
-                  description: "Only 2% platform fee. Keep 98% of your earnings. Transparent pricing.",
+                  description: "Only 5% platform fee. Keep 95% of your earnings. Transparent pricing.",
                   benefit: "Maximize your profits"
                 },
                 {

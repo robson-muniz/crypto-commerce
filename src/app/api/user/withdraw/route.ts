@@ -2,6 +2,9 @@ import { NextResponse } from "next/server"
 import { getServerSession } from "next-auth"
 import { authOptions } from "@/lib/auth"
 import db from "@/lib/db"
+import { sendBtc } from "@/lib/bitcoin-core"
+
+const PLATFORM_FEE = 0.05 // 5%
 
 export async function POST() {
   const session = await getServerSession(authOptions)
@@ -13,9 +16,7 @@ export async function POST() {
   try {
     const user = await db.user.findUnique({
       where: { id: session.user.id },
-      select: {
-        payoutAddress: true,
-      },
+      select: { payoutAddress: true },
     })
 
     if (!user?.payoutAddress) {
@@ -25,56 +26,56 @@ export async function POST() {
       )
     }
 
-    // Get completed orders to calculate balance
-    const orders = await db.order.findMany({
+    // Only count completed orders that haven't been paid out yet
+    const unpaidOrders = await db.order.findMany({
       where: {
-        product: {
-          vendorId: session.user.id,
-        },
+        product: { vendorId: session.user.id },
         status: "COMPLETED",
+        payoutTxHash: null,
       },
-      select: {
-        id: true,
-        amount: true,
-      },
+      select: { id: true, amount: true },
     })
 
-    const balance = orders.reduce((acc, order) => acc + order.amount, 0)
-
-    if (balance <= 0) {
+    if (unpaidOrders.length === 0) {
       return NextResponse.json(
         { error: "No funds available to withdraw" },
         { status: 400 }
       )
     }
 
-    // TODO: Implement actual Bitcoin withdrawal logic here
-    // For now, we'll just mark orders as paid out
-    // In a real implementation, you would:
-    // 1. Create a Bitcoin transaction to user.payoutAddress
-    // 2. Wait for confirmation
-    // 3. Update orders with payout transaction hash
+    // Total gross earnings
+    const grossBalance = unpaidOrders.reduce((acc, o) => acc + o.amount, 0)
 
-    // Simulate withdrawal by marking orders as paid out
+    // Deduct 5% platform fee — seller receives 95%
+    const sellerAmount = parseFloat((grossBalance * (1 - PLATFORM_FEE)).toFixed(8))
+    const platformFee = parseFloat((grossBalance * PLATFORM_FEE).toFixed(8))
+
+    console.log(
+      `[WITHDRAWAL] Vendor ${session.user.id} | Gross: ${grossBalance} BTC | ` +
+      `Payout: ${sellerAmount} BTC (95%) | Platform fee: ${platformFee} BTC (5%) | ` +
+      `To: ${user.payoutAddress}`
+    )
+
+    // Send real BTC to the seller — platform fee stays in the platform wallet
+    const txid = await sendBtc(user.payoutAddress, sellerAmount)
+
+    // Mark all orders as paid out with the real txid
     await db.order.updateMany({
-      where: {
-        id: { in: orders.map((o) => o.id) },
-      },
-      data: {
-        // We'll use this field to track that payout was processed
-        payoutTxHash: "simulated-withdrawal-" + Date.now(),
-      },
+      where: { id: { in: unpaidOrders.map((o) => o.id) } },
+      data: { payoutTxHash: txid },
     })
 
     return NextResponse.json({
       success: true,
-      amount: balance,
+      amount: sellerAmount,
+      fee: platformFee,
       address: user.payoutAddress,
+      txid,
     })
   } catch (error) {
     console.error("Withdrawal error:", error)
     return NextResponse.json(
-      { error: "Failed to process withdrawal" },
+      { error: error instanceof Error ? error.message : "Failed to process withdrawal" },
       { status: 500 }
     )
   }

@@ -90,7 +90,7 @@ export default function TermsPage() {
             <section className="bg-white/5 border border-white/10 rounded-2xl p-8 hover:border-primary/30 transition-colors">
               <h2 className="text-2xl font-bold text-white mb-4">5. Payments & Fees</h2>
               <p className="mb-4">
-                CryptoCommerce facilitates payments using cryptocurrencies. We charge a platform fee of 2% on all sales. This fee is automatically deducted from the transaction.
+                CryptoCommerce facilitates payments using cryptocurrencies. We charge a platform fee of 5% on all sales. This fee is automatically deducted from the transaction.
               </p>
               <p>
                 All sales are final. Due to the nature of digital goods and blockchain transactions, we generally do not offer refunds, except in cases of proven fraud or technical failure on our part.

@@ -93,7 +93,7 @@ export default function HelpPage() {
                 />
                 <FAQItem
                   question="What are the fees?"
-                  answer="We charge a flat 2% platform fee on all sales. There are no listing fees or monthly subscriptions."
+                  answer="We charge a flat 5% platform fee on all sales. There are no listing fees or monthly subscriptions."
                 />
               </div>
             </section>
