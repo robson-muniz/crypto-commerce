@@ -38,7 +38,7 @@ export async function POST(request: Request): Promise<NextResponse> {
             'application/epub+zip', // epub
             'text/plain',
           ],
-          maximumSizeInBytes: 100 * 1024 * 1024, // 100MB limit per file
+          maximumSizeInBytes: 10 * 1024 * 1024, // 10MB limit per file
           validUntil: Date.now() + 5 * 60 * 1000, // Token valid for 5 mins
           tokenPayload: JSON.stringify({
             vendorId: session.user.id,
