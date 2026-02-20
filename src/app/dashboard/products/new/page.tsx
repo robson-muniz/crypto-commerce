@@ -13,22 +13,41 @@ export default function NewProductPage() {
     setLoading(true)
     setError("")
 
-    const formData = new FormData(e.currentTarget)
-
     try {
+      const formData = new FormData(e.currentTarget)
+      const file = formData.get("file") as File
+
+      if (!file || file.size === 0) {
+        throw new Error("Please select a file to upload")
+      }
+
+      // 1. Upload to Vercel Blob directly from the browser
+      const { upload } = await import('@vercel/blob/client')
+      const newBlob = await upload(file.name, file, {
+        access: 'public',
+        handleUploadUrl: '/api/upload',
+      })
+
+      // 2. Add the real file URL to the form data
+      formData.set("fileUrl", newBlob.url)
+      // Remove the actual file from formData since it's already uploaded
+      formData.delete("file")
+
+      // 3. Create the product in the database
       const res = await fetch("/api/products", {
         method: "POST",
         body: formData,
       })
 
       if (!res.ok) {
-        throw new Error("Failed to create product")
+        const data = await res.json().catch(() => null)
+        throw new Error(data?.message || "Failed to create product")
       }
 
       router.push("/dashboard/products")
       router.refresh()
     } catch (err) {
-      setError("Something went wrong")
+      setError(err instanceof Error ? err.message : "Something went wrong")
     } finally {
       setLoading(false)
     }
