@@ -19,9 +19,13 @@ export async function POST(request: Request): Promise<NextResponse> {
       return NextResponse.json({ error: 'Filename and content type are required' }, { status: 400 });
     }
 
-    // Generate a clean filename: vendorId/timestamp-filename
-    const safePathname = filename.replace(/[^a-zA-Z0-9.-]/g, '_');
-    const finalPathname = `${session.user.id}/${Date.now()}-${safePathname}`;
+    // Safely extract the original file extension (e.g., .zip, .mp4, .pdf)
+    const fileExtension = filename.includes('.') ? `.${filename.split('.').pop()}` : '';
+
+    // Generate a secure layout: vendorId/uuid.ext
+    // This prevents path traversal, malicious characters, and predictable file URLs
+    const secureFileName = `${crypto.randomUUID()}${fileExtension}`;
+    const finalPathname = `${session.user.id}/${secureFileName}`;
 
     const command = new PutObjectCommand({
       Bucket: process.env.R2_BUCKET_NAME,
@@ -29,7 +33,8 @@ export async function POST(request: Request): Promise<NextResponse> {
       ContentType: contentType,
     });
 
-    const presignedUrl = await getSignedUrl(r2Client, command, { expiresIn: 300 }); // 5 minutes
+    // Enforce a strict 60-second expiration window
+    const presignedUrl = await getSignedUrl(r2Client, command, { expiresIn: 60 }); // 1 minute
 
     const publicUrl = process.env.R2_PUBLIC_URL
       ? `${process.env.R2_PUBLIC_URL}/${finalPathname}`
