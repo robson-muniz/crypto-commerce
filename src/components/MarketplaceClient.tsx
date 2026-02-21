@@ -45,6 +45,7 @@ interface MarketplaceClientProps {
 }
 
 export default function MarketplaceClient({ products: initialProducts, sellers: initialSellers }: MarketplaceClientProps) {
+  console.log("MarketplaceClient initialProducts:", initialProducts);
   const [activeCategory, setActiveCategory] = useState("ALL");
   const [products, setProducts] = useState(initialProducts);
   const [sellers, setSellers] = useState(initialSellers);
