@@ -59,7 +59,8 @@ export async function POST(
     }
 
     const formData = new FormData();
-    const blob = new Blob([fileBuffer]);
+    // Use 'as any' to bypass the TypeScript 5+ DOM lib mismatch between SharedArrayBuffer and ArrayBuffer
+    const blob = new Blob([fileBuffer as any]);
     formData.append("file", blob, fileKeyParts[fileKeyParts.length - 1]);
 
     const uploadRes = await fetch("https://www.virustotal.com/api/v3/files", {
