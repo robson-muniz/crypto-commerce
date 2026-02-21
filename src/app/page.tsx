@@ -61,11 +61,11 @@ export default function Home() {
             </div>
 
             <h1 className="max-w-5xl text-5xl font-black tracking-tighter sm:text-6xl md:text-7xl lg:text-[5rem] mb-8 leading-[1.1]">
-              <span className="inline-block text-white drop-shadow-sm">Sell SFW Digital Creations</span>
+              <span className="inline-block text-gradient pb-2 drop-shadow-sm">Sell SFW Digital Creations</span>
               <br className="hidden sm:block" />
               <span className="inline-block mt-2">
-                <span className="text-white">Into </span>
-                <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#8B5CF6] via-[#D946EF] to-[#06B6D4] drop-shadow-[0_0_15px_rgba(217,70,239,0.3)]">
+                <span className="text-muted-foreground mr-3">Into</span>
+                <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-500 drop-shadow-[0_0_15px_rgba(6,182,212,0.3)]">
                   Passive Crypto Income
                 </span>
               </span>
