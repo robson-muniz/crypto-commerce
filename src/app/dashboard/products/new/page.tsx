@@ -21,9 +21,9 @@ export default function NewProductPage() {
         throw new Error("Please select a file to upload")
       }
 
-      const MAX_FILE_SIZE = 10 * 1024 * 1024; // 10MB
+      const MAX_FILE_SIZE = 25 * 1024 * 1024; // 25MB
       if (file.size > MAX_FILE_SIZE) {
-        throw new Error("File size must be less than 10MB")
+        throw new Error("File size must be less than 25MB")
       }
 
       // 1. Get presigned URL from our API
@@ -190,7 +190,7 @@ export default function NewProductPage() {
               focus:outline-none focus:ring-2 focus:ring-purple-500/20 focus:border-purple-500/50"
           />
           <p className="mt-2 text-xs text-gray-500">
-            The file users will download after payment. Max file size: 10MB.
+            The file users will download after payment. Max file size: 25MB.
           </p>
         </div>
 
