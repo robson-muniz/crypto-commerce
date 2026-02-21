@@ -8,8 +8,8 @@ export const dynamic = 'force-dynamic';
 export default async function MarketplacePage() {
   const products = await prisma.product.findMany({
     where: {
-      category: { not: "MINITUBE" }, // Exclude MINITUBE content from initial load for SEO/Safety
-      status: "ACTIVE" // Only show fully approved products
+      category: { not: "MINITUBE" } // Exclude MINITUBE content from initial load for SEO/Safety
+      // TODO: re-add `status: "ACTIVE"` after running `npx prisma db push` on production DB
     },
     orderBy: { createdAt: "desc" },
     include: {
