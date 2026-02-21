@@ -107,9 +107,20 @@ export default function ProductsPage() {
                     >
                       <div className="flex items-start gap-3">
                         <div className="flex-1 min-w-0">
-                          <p className="text-sm font-medium text-white truncate">
-                            {product.title}
-                          </p>
+                          <div className="flex items-center gap-2">
+                            <p className="text-sm font-medium text-white truncate">
+                              {product.title}
+                            </p>
+                            {product.status === "PENDING_REVIEW" ? (
+                              <span className="inline-flex items-center rounded-full bg-yellow-500/10 px-2 py-0.5 text-xs font-medium text-yellow-500 ring-1 ring-inset ring-yellow-500/20">
+                                Pending Review
+                              </span>
+                            ) : product.status === "ACTIVE" ? (
+                              <span className="inline-flex items-center rounded-full bg-emerald-500/10 px-2 py-0.5 text-xs font-medium text-emerald-500 ring-1 ring-inset ring-emerald-500/20">
+                                Active
+                              </span>
+                            ) : null}
+                          </div>
                           {product.description && (
                             <p className="text-xs text-gray-400 truncate mt-1">
                               {product.description}

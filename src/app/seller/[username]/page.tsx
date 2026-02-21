@@ -23,10 +23,13 @@ export default async function SellerPage({ params }: Props) {
     },
     include: {
       products: {
+        where: { status: "ACTIVE" },
         orderBy: { createdAt: "desc" }
       },
       _count: {
-        select: { products: true }
+        select: {
+          products: { where: { status: "ACTIVE" } }
+        }
       }
     }
   });

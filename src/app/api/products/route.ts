@@ -33,7 +33,9 @@ export async function POST(req: Request) {
         currency,
         category,
         fileUrl,
-        vendorId: session.user.id
+        vendorId: session.user.id,
+        status: "PENDING_REVIEW",
+        antivirusResult: "UNSCANNED"
       }
     })
 

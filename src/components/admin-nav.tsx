@@ -15,6 +15,11 @@ export function AdminNav() {
       icon: Activity,
     },
     {
+      title: "Pending Approvals",
+      href: "/admin/products",
+      icon: ShieldCheck,
+    },
+    {
       title: "Users",
       href: "/admin/users",
       icon: Users,

@@ -27,17 +27,19 @@ model User {
 }
 
 model Product {
-  id          String   @id @default(cuid())
-  title       String
-  description String?
-  price       Float    // Price in USD or base currency
-  currency    String   @default("USD")
-  category    String   @default("OTHER") // VIDEOS, EBOOKS, CODE, COURSES, MINITUBE, OTHER
-  fileUrl     String   // Path to file in storage (R2/S3)
-  vendorId    String
-  vendor      User     @relation(fields: [vendorId], references: [id])
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  id              String   @id @default(cuid())
+  title           String
+  description     String?
+  price           Float    // Price in USD or base currency
+  currency        String   @default("USD")
+  category        String   @default("OTHER") // VIDEOS, EBOOKS, CODE, COURSES, MINITUBE, OTHER
+  fileUrl         String   // Path to file in storage (R2/S3)
+  status          String   @default("PENDING_REVIEW") // PENDING_REVIEW, ACTIVE, REJECTED
+  antivirusResult String   @default("UNSCANNED") // UNSCANNED, CLEAN, MALICIOUS
+  vendorId        String
+  vendor          User     @relation(fields: [vendorId], references: [id])
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
   
   orders Order[]
 }
