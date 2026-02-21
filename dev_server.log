@@ -1,0 +1,71 @@
+
+> crypto-commerce@0.1.0 dev
+> next dev
+
+▲ Next.js 16.1.6 (Turbopack)
+- Local:         http://localhost:3000
+- Network:       http://192.168.1.6:3000
+- Environments: .env
+
+✓ Starting...
+✓ Ready in 1518ms
+ GET /dashboard/products/new 200 in 1712ms (compile: 794ms, render: 918ms)
+[next-auth][error][JWT_SESSION_ERROR] 
+https://next-auth.js.org/errors#jwt_session_error Invalid Compact JWE {
+  message: 'Invalid Compact JWE',
+  stack: 'JWEInvalid: Invalid Compact JWE\n' +
+    '    at compactDecrypt (/home/robson/WebstormProjects/crypto-commerce/.next/dev/server/chunks/node_modules_jose_dist_node_cjs_bd88468e._.js:2306:15)\n' +
+    '    at jwtDecrypt (/home/robson/WebstormProjects/crypto-commerce/.next/dev/server/chunks/node_modules_jose_dist_node_cjs_bd88468e._.js:3770:61)\n' +
+    '    at Object.decode (/home/robson/WebstormProjects/crypto-commerce/.next/dev/server/chunks/node_modules_next-auth_1810886e._.js:725:52)\n' +
+    '    at async Object.session (/home/robson/WebstormProjects/crypto-commerce/.next/dev/server/chunks/node_modules_next-auth_1810886e._.js:2038:34)\n' +
+    '    at async AuthHandler (/home/robson/WebstormProjects/crypto-commerce/.next/dev/server/chunks/node_modules_next-auth_1810886e._.js:3184:37)\n' +
+    '    at async getServerSession (/home/robson/WebstormProjects/crypto-commerce/.next/dev/server/chunks/node_modules_next-auth_1810886e._.js:3576:21)\n' +
+    '    at async POST (/home/robson/WebstormProjects/crypto-commerce/.next/dev/server/chunks/[root-of-the-server]__a4e4b48b._.js:214:21)\n' +
+    '    at async AppRouteRouteModule.do (/home/robson/WebstormProjects/crypto-commerce/node_modules/next/dist/compiled/next-server/app-route-turbo.runtime.dev.js:5:37866)\n' +
+    '    at async AppRouteRouteModule.handle (/home/robson/WebstormProjects/crypto-commerce/node_modules/next/dist/compiled/next-server/app-route-turbo.runtime.dev.js:5:45156)\n' +
+    '    at async responseGenerator (/home/robson/WebstormProjects/crypto-commerce/.next/dev/server/chunks/node_modules_next_a60d1bbb._.js:16529:38)\n' +
+    '    at async AppRouteRouteModule.handleResponse (/home/robson/WebstormProjects/crypto-commerce/node_modules/next/dist/compiled/next-server/app-route-turbo.runtime.dev.js:1:191938)\n' +
+    '    at async handleResponse (/home/robson/WebstormProjects/crypto-commerce/.next/dev/server/chunks/node_modules_next_a60d1bbb._.js:16592:32)\n' +
+    '    at async Module.handler (/home/robson/WebstormProjects/crypto-commerce/.next/dev/server/chunks/node_modules_next_a60d1bbb._.js:16645:13)\n' +
+    '    at async DevServer.renderToResponseWithComponentsImpl (/home/robson/WebstormProjects/crypto-commerce/node_modules/next/dist/server/base-server.js:1442:9)\n' +
+    '    at async DevServer.renderPageComponent (/home/robson/WebstormProjects/crypto-commerce/node_modules/next/dist/server/base-server.js:1494:24)\n' +
+    '    at async DevServer.renderToResponseImpl (/home/robson/WebstormProjects/crypto-commerce/node_modules/next/dist/server/base-server.js:1544:32)\n' +
+    '    at async DevServer.pipeImpl (/home/robson/WebstormProjects/crypto-commerce/node_modules/next/dist/server/base-server.js:1038:25)\n' +
+    '    at async NextNodeServer.handleCatchallRenderRequest (/home/robson/WebstormProjects/crypto-commerce/node_modules/next/dist/server/next-server.js:395:17)\n' +
+    '    at async DevServer.handleRequestImpl (/home/robson/WebstormProjects/crypto-commerce/node_modules/next/dist/server/base-server.js:929:17)\n' +
+    '    at async /home/robson/WebstormProjects/crypto-commerce/node_modules/next/dist/server/dev/next-dev-server.js:387:20\n' +
+    '    at async Span.traceAsyncFn (/home/robson/WebstormProjects/crypto-commerce/node_modules/next/dist/trace/trace.js:157:20)\n' +
+    '    at async DevServer.handleRequest (/home/robson/WebstormProjects/crypto-commerce/node_modules/next/dist/server/dev/next-dev-server.js:383:24)\n' +
+    '    at async invokeRender (/home/robson/WebstormProjects/crypto-commerce/node_modules/next/dist/server/lib/router-server.js:248:21)\n' +
+    '    at async handleRequest (/home/robson/WebstormProjects/crypto-commerce/node_modules/next/dist/server/lib/router-server.js:447:24)\n' +
+    '    at async requestHandlerImpl (/home/robson/WebstormProjects/crypto-commerce/node_modules/next/dist/server/lib/router-server.js:496:13)\n' +
+    '    at async Server.requestListener (/home/robson/WebstormProjects/crypto-commerce/node_modules/next/dist/server/lib/start-server.js:226:13)',
+  name: 'JWEInvalid'
+}
+ POST /api/products 401 in 147ms (compile: 113ms, render: 33ms)
+ GET /dashboard/products/new 200 in 519ms (compile: 37ms, render: 482ms)
+ POST /api/upload 200 in 2.9s (compile: 2.3s, render: 588ms)
+Prisma Error during product creation:  Error [PrismaClientInitializationError]: 
+Invalid `__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$db$2e$ts__$5b$app$2d$route$5d$__$28$ecmascript$29$__["default"].product.create()` invocation in
+/home/robson/WebstormProjects/crypto-commerce/.next/dev/server/chunks/[root-of-the-server]__a4e4b48b._.js:237:165
+
+  234         status: 400
+  235     });
+  236 }
+→ 237 const product = await __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$db$2e$ts__$5b$app$2d$route$5d$__$28$ecmascript$29$__["default"].product.create(
+Can't reach database server at `localhost:5432`
+
+Please make sure your database server is running at `localhost:5432`.
+    at <unknown> (src/app/api/products/route.ts:28:42)
+    at async POST (src/app/api/products/route.ts:28:21)
+  26 |     }
+  27 |
+> 28 |     const product = await prisma.product.create({
+     |                                          ^
+  29 |       data: {
+  30 |         title,
+  31 |         description, {
+  clientVersion: '5.22.0',
+  errorCode: undefined
+}
+ POST /api/products 500 in 1458ms (compile: 39ms, render: 1419ms)

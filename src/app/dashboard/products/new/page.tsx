@@ -26,19 +26,42 @@ export default function NewProductPage() {
         throw new Error("File size must be less than 10MB")
       }
 
-      // 1. Upload to Vercel Blob directly from the browser
-      const { upload } = await import('@vercel/blob/client')
-      const newBlob = await upload(file.name, file, {
-        access: 'public',
-        handleUploadUrl: '/api/upload',
-      })
+      // 1. Get presigned URL from our API
+      const presignedRes = await fetch('/api/upload', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          filename: file.name,
+          contentType: file.type || 'application/octet-stream',
+        }),
+      });
 
-      // 2. Add the real file URL to the form data
-      formData.set("fileUrl", newBlob.url)
+      if (!presignedRes.ok) {
+        const data = await presignedRes.json().catch(() => null);
+        throw new Error(data?.error || "Failed to initialize upload");
+      }
+
+      const { presignedUrl, publicUrl } = await presignedRes.json();
+
+      // 2. Upload directly to R2
+      const uploadRes = await fetch(presignedUrl, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': file.type || 'application/octet-stream',
+        },
+        body: file,
+      });
+
+      if (!uploadRes.ok) {
+        throw new Error("Failed to upload file to storage");
+      }
+
+      // 3. Add the real file URL to the form data
+      formData.set("fileUrl", publicUrl)
       // Remove the actual file from formData since it's already uploaded
       formData.delete("file")
 
-      // 3. Create the product in the database
+      // 4. Create the product in the database
       const res = await fetch("/api/products", {
         method: "POST",
         body: formData,

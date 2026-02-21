@@ -1,62 +1,50 @@
-import { handleUpload, type HandleUploadBody } from '@vercel/blob/client';
 import { NextResponse } from 'next/server';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/auth';
+import { r2Client } from '@/lib/r2';
+import { PutObjectCommand } from '@aws-sdk/client-s3';
+import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
 
 export async function POST(request: Request): Promise<NextResponse> {
-  const body = (await request.json()) as HandleUploadBody;
-
   try {
-    const jsonResponse = await handleUpload({
-      body,
-      request,
-      onBeforeGenerateToken: async (pathname) => {
-        // Authenticate the user
-        const session = await getServerSession(authOptions);
+    const session = await getServerSession(authOptions);
 
-        if (!session || !session.user || session.user.role !== 'VENDOR') {
-          throw new Error('Unauthorized: Only vendors can upload files');
-        }
+    if (!session || !session.user || session.user.role !== 'VENDOR') {
+      return NextResponse.json({ error: 'Unauthorized: Only vendors can upload files' }, { status: 401 });
+    }
 
-        // Generate a clean filename: vendorId/timestamp-filename
-        const safePathname = pathname.replace(/[^a-zA-Z0-9.-]/g, '_');
-        const finalPathname = `${session.user.id}/${Date.now()}-${safePathname}`;
+    const { filename, contentType } = await request.json();
 
-        return {
-          allowedContentTypes: [
-            // Allow common digital product types
-            'application/pdf',
-            'application/zip',
-            'application/x-zip-compressed',
-            'image/jpeg',
-            'image/png',
-            'image/gif',
-            'image/webp',
-            'video/mp4',
-            'audio/mpeg',
-            'application/vnd.openxmlformats-officedocument.wordprocessingml.document', // docx
-            'application/epub+zip', // epub
-            'text/plain',
-          ],
-          maximumSizeInBytes: 10 * 1024 * 1024, // 10MB limit per file
-          validUntil: Date.now() + 5 * 60 * 1000, // Token valid for 5 mins
-          tokenPayload: JSON.stringify({
-            vendorId: session.user.id,
-          }),
-        };
-      },
-      onUploadCompleted: async ({ blob, tokenPayload }) => {
-        console.log('Blob upload completed', blob.url);
-        // We don't save to the DB here because the product isn't created yet.
-        // We just log that the file was successfully uploaded.
-      },
+    if (!filename || !contentType) {
+      return NextResponse.json({ error: 'Filename and content type are required' }, { status: 400 });
+    }
+
+    // Generate a clean filename: vendorId/timestamp-filename
+    const safePathname = filename.replace(/[^a-zA-Z0-9.-]/g, '_');
+    const finalPathname = `${session.user.id}/${Date.now()}-${safePathname}`;
+
+    const command = new PutObjectCommand({
+      Bucket: process.env.R2_BUCKET_NAME,
+      Key: finalPathname,
+      ContentType: contentType,
     });
 
-    return NextResponse.json(jsonResponse);
+    const presignedUrl = await getSignedUrl(r2Client, command, { expiresIn: 300 }); // 5 minutes
+
+    const publicUrl = process.env.R2_PUBLIC_URL
+      ? `${process.env.R2_PUBLIC_URL}/${finalPathname}`
+      // Fallback domain format for R2. Warning: Many R2 buckets restrict public access without custom domain or r2.dev enabled!
+      : `https://${process.env.R2_BUCKET_NAME}.${process.env.R2_ACCOUNT_ID}.r2.cloudflarestorage.com/${finalPathname}`;
+
+    return NextResponse.json({
+      presignedUrl,
+      publicUrl,
+      finalPathname
+    });
   } catch (error) {
     return NextResponse.json(
       { error: (error as Error).message },
-      { status: 400 } // The webhook will retry 500 errors
+      { status: 500 }
     );
   }
 }

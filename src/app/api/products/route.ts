@@ -39,7 +39,7 @@ export async function POST(req: Request) {
 
     return NextResponse.json(product, { status: 201 })
   } catch (error) {
-    console.error(error)
+    console.error("Prisma Error during product creation: ", error)
     return NextResponse.json({ message: "Internal Error" }, { status: 500 })
   }
 }
