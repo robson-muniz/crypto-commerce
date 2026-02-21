@@ -14,8 +14,13 @@ interface Props {
 export default async function SellerPage({ params }: Props) {
   const { username } = await params;
 
-  const seller = await prisma.user.findUnique({
-    where: { username },
+  const seller = await prisma.user.findFirst({
+    where: {
+      OR: [
+        { username },
+        { id: username }
+      ]
+    },
     include: {
       products: {
         orderBy: { createdAt: "desc" }
