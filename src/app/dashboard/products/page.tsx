@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react"
 import Link from "next/link"
-import { Plus, Pencil } from "lucide-react"
+import { Plus, Pencil, Trash2 } from "lucide-react"
 import { motion } from "framer-motion"
 import SkeletonLoader from "@/components/skeleton-loader"
 import { StaggerContainer, StaggerItem } from "@/components/stagger-container"
@@ -33,6 +33,28 @@ export default function ProductsPage() {
         setLoading(false)
       })
   }, [])
+
+  const handleDelete = async (id: string, title: string) => {
+    if (!confirm(`Are you sure you want to delete "${title}"? This cannot be undone.`)) {
+      return;
+    }
+
+    try {
+      const res = await fetch(`/api/products/${id}`, {
+        method: "DELETE",
+      });
+
+      if (!res.ok) {
+        throw new Error("Failed to delete product");
+      }
+
+      // Remove the product from the local state
+      setProducts(products.filter((p) => p.id !== id));
+    } catch (err) {
+      console.error(err);
+      alert("An error occurred while deleting the product.");
+    }
+  };
 
   return (
     <div className="space-y-6">
@@ -102,14 +124,22 @@ export default function ProductsPage() {
                         </p>
                       </div>
                     </Link>
-                    <Link
-                      href={`/dashboard/products/${product.id}/edit`}
-                      className="flex items-center gap-2 px-3 py-2 rounded-lg border border-white/10 bg-white/5 text-sm font-medium text-gray-300 hover:bg-white/10 hover:text-white hover:border-purple-500/50 transition-all"
-                      onClick={(e) => e.stopPropagation()}
-                    >
-                      <Pencil className="h-4 w-4" />
-                      <span className="hidden sm:inline">Edit</span>
-                    </Link>
+                    <div className="flex items-center gap-2" onClick={(e) => e.stopPropagation()}>
+                      <Link
+                        href={`/dashboard/products/${product.id}/edit`}
+                        className="flex items-center gap-2 px-3 py-2 rounded-lg border border-white/10 bg-white/5 text-sm font-medium text-gray-300 hover:bg-white/10 hover:text-white hover:border-purple-500/50 transition-all"
+                      >
+                        <Pencil className="h-4 w-4" />
+                        <span className="hidden sm:inline">Edit</span>
+                      </Link>
+                      <button
+                        onClick={() => handleDelete(product.id, product.title)}
+                        className="flex items-center gap-2 px-3 py-2 rounded-lg border border-red-500/20 bg-red-500/5 text-sm font-medium text-red-400 hover:bg-red-500/10 hover:text-red-300 hover:border-red-500/30 transition-all"
+                        aria-label="Delete product"
+                      >
+                        <Trash2 className="h-4 w-4" />
+                      </button>
+                    </div>
                   </motion.div>
                 </StaggerItem>
               ))}
